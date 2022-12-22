@@ -1,3 +1,3 @@
 # portfolio
 
-The source for my portfolio website at [sccreeper/portfolio](https://github.com/sccreeper/portfolio).
+The source for my portfolio website at [www.oscarcp.net](https://www.oscarcp.net).
