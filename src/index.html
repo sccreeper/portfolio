@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./index.css" rel="stylesheet">
+
+    <meta property="og:title" content="Oscar Peace"/>
+    <meta property="og:description" content="Portfolio Website"/>
+
+    <script src="./scripts/main.js" type="module" defer></script>
+
+    <title>Oscar Peace</title>
+</head>
+
+<body style="font-family: 'Fira Mono', monospace;" class="dark:bg-black dark:text-white">
+
+    <div class="justify-center m-auto w-1/2 p-4 object-center border-black dark:border-white border mt-4 mb-4">
+
+        <h1 class="text-4xl">Oscar Peace</h1>
+        <p>Programmer and map maker.</p>
+
+        <br>
+
+        <h1 class="text-xl underline">About</h1>
+
+        <p class="text-sm">I'm a <span id="age">00</span> year old programmer and map maker from the UK. My main
+            languages are <span class="font-bold text-blue-800">Python</span>, <span
+                class="font-bold text-yellow-400">Javascript</span> and <span class="font-bold text-blue-500">Go</span>.
+        </p>
+        <p class="text-sm">As for map making, I mainly make maps for <span class="font-bold text-blue-400">Garry's
+                Mod</span> using <span class="font-bold text-orange-500">Hammer</span>.</p>
+
+        <br>
+
+        <h1 class="text-xl underline">Projects</h1>
+
+        <div class="content-div">
+            <div class="p-4">
+                <img src="assets/goputer_logo.png?width=128" alt="goputer logo" />
+            </div>
+            <div class="p-4">
+                <h3 class="text-xl">goputer</h3>
+                <br>
+                <p class="text-sm">goputer is a fantasy computer/vm which is meant to show how computers work at a low
+                    level.</p>
+                <br>
+                <a href="https://goputer.oscarcp.net" target="_blank">
+                    <div class="link-button">
+                        <i class="bi bi-globe"></i> Website
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="content-div">
+            <div class="p-4">
+                <img src="assets/bcc_logo.png?width=128" alt="goputer logo" />
+            </div>
+            <div class="p-4">
+                <h3 class="text-xl">Better ClassCharts</h3>
+                <br>
+                <p class="text-sm">Alternative to the ClassCharts app for students.</p>
+                <br>
+                <a href="https://github.com/sccreeper/BetterClasscharts" target="_blank">
+                    <div class="link-button">
+                        <i class="bi bi-git"></i> Repository
+                    </div>
+                </a>
+            </div>
+
+        </div>
+
+        <div class="content-div">
+            <div class="p-4 text-center">
+                <i class="bi bi-table text-8xl text-green-800"></i>
+            </div>
+            <div class="p-4">
+                <h3 class="text-xl">image2excel</h3>
+                <br>
+                <p class="text-sm">Convert images and videos into Excel spreadsheets.</p>
+                <br>
+                <a href="https://github.com/sccreeper/image2excel" target="_blank">
+                    <div class="link-button">
+                        <i class="bi bi-git"></i> Repository
+                    </div>
+                </a>
+            </div>
+
+        </div>
+
+        <h1 class="text-xl underline">Maps</h1>
+
+        <div class="content-div">
+            <div class="p-4">
+                <picture class="slide-show" id="slide_1" data-index="0" data-img-id="slide_1_img">
+                    <source srcset="./assets/maps/buildings/0.jpg?height=96" type="image/jpeg"/>
+                    <source srcset="./assets/maps/buildings/1.jpg?height=96" type="image/jpeg"/>
+                    <source srcset="./assets/maps/buildings/2.jpg?height=96" type="image/jpeg"/>
+                </picture>
+                <img class="object-none object-center w-32 h-32" id="slide_1_img" src="./assets/maps/buildings/0.jpg?height=96"/>
+            </div>
+            <div class="p-4">
+                <h3 class="text-xl">gm_buildings</h3>
+                <br>
+                <p class="text-sm">A map set on an island with a variety of buildings.</p>
+                <p class="text-sm"><span class="sub-count font-bold"
+                    data-url="https://steamcommunity.com/sharedfiles/filedetails/?id=2369338256">~1300</span>
+                subscribers.</p>
+                <br>
+                <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2369338256" target="_blank">
+                    <div class="link-button">
+                        <i class="bi bi-steam"></i> Workshop
+                    </div>
+                </a>
+            </div>
+
+        </div>
+
+        <div class="content-div">
+            <div class="p-4 text-center">
+                <picture class="slide-show" id="slide_2" data-index="0" data-img-id="slide_2_img">
+                    <source srcset="./assets/maps/castle/0.jpg?height=96" type="image/jpeg"/>
+                    <source srcset="./assets/maps/castle/1.jpg?height=96" type="image/jpeg"/>
+                    <source srcset="./assets/maps/castle/2.jpg?height=96" type="image/jpeg"/>
+                </picture>
+                <img class="object-none object-center w-32 h-32" id="slide_2_img" src="./assets/maps/castle/0.jpg?height=96"/>
+            </div>
+            <div class="p-4">
+                <h3 class="text-xl">gm_castle_island</h3>
+                <br>
+                <p class="text-sm">A medieval sandstone castle also on an island.</p>
+                <p class="text-sm"><span class="sub-count font-bold"
+                        data-url="https://steamcommunity.com/sharedfiles/filedetails/?id=2890807028">~1600</span>
+                    subscribers.</p>
+                <br>
+                <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2890807028" target="_blank">
+                    <div class="link-button">
+                        <i class="bi bi-steam"></i> Workshop
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </div>
+    <p class="text-xs text-center mb-2">Made by Oscar Peace. Source available at 
+        <a class="underline" target="_blank" href="https://github.com/sccreeper/portfolio">
+            <i class="bi bi-github"></i> sccreeper/portfolio</a>. <span id="theme-span" class="select-none cursor-pointer">Theme: Dark</span></p>
+</body>
+
+</html>
