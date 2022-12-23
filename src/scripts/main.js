@@ -1,6 +1,14 @@
 import globals from "./globals";
 
-function doSlideshow(index) {
+// Constants
+
+const b_day = new Date("September 29, 2005 00:00:00");
+const favicon_light = new URL("../assets/favicon_light.png", import.meta.url);
+const favicon_dark = new URL("../assets/favicon_dark.png", import.meta.url);
+
+// Logic Functions
+
+function DoSlideshow(index) {
 
     // Increment index
 
@@ -16,18 +24,20 @@ function doSlideshow(index) {
 
     document.getElementById(globals.slide_shows[index].img_id).src = el.children[globals.slide_shows[index].index].getAttribute("srcset");
 
-    setTimeout(doSlideshow, 3000, index)
+    setTimeout(DoSlideshow, 3000, index)
 }
 
-function mediaQueryChangeTheme(q) {
+function MediaQueryChangeTheme(q) {
     if (q.matches) {
         document.getElementsByTagName("html")[0].classList.add("dark");
+        document.getElementById("favicon").setAttribute("href", favicon_dark);
     } else {
         document.getElementsByTagName("html")[0].classList.remove("dark");
+        document.getElementById("favicon").setAttribute("href", favicon_light);
     }
 }
 
-const b_day = new Date("September 29, 2005 00:00:00");
+// Init code
 
 //Set age
 
@@ -70,15 +80,15 @@ for (let i = 0; i < slide_show_els.length; i++) {
         img_id: slide_show_els[i].getAttribute("data-img-id"),
     });
     
-    doSlideshow(i);
+    DoSlideshow(i);
 
 }
 
 // Theming
 
 var theme = window.matchMedia("(prefers-color-scheme: dark)");
-mediaQueryChangeTheme(theme)
-theme.addListener(mediaQueryChangeTheme)
+MediaQueryChangeTheme(theme)
+theme.addListener(MediaQueryChangeTheme)
 
 document.getElementById("theme-span").addEventListener("click", (e) => {
 
