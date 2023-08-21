@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "portfolio"
+version = "0.1.0"
+description = "Blog/portfolio"
+authors = ["Oscar Peace <oscar@oscarcp.net>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+Flask = "^2.3.2"
+gunicorn = "^21.2.0"
+mistune = "^3.0.1"
+flask-htmx = "^0.3.1"
+markdown = "^3.4.4"
+pillow = "^10.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,3 +1,5 @@
 .parcel-cache
 node_modules
 dist
+src/static/dist.css
+.venv

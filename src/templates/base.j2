@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+      <title>{% block title %}{% endblock title %} - Oscar Peace</title>
+      <script src="https://unpkg.com/htmx.org@1.9.4"></script>
+
+      <!-- Highlight JS -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
+      <link rel="stylesheet" href="/static/dist.css" media="screen"/>
+      <link rel="stylesheet" href="/static/printer.css" media="print"/>
+
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+      {% block head %}{% endblock head %}
+
+  </head>
+
+
+  <body>
+
+      <div id="content">
+        <div id="navbar">
+            <h1>Oscar Peace</h1>
+            <div id="navbar-links">
+                <a hx-trigger="click" hx-get="/" hx-push-url="true" hx-target="#content-block" hx-replace="innerHTML">Home</a>
+                <a hx-trigger="click" hx-get="/projects" hx-push-url="true" hx-target="#content-block" hx-replace="innerHTML">Projects</a>
+                <a hx-trigger="click" hx-get="/posts" hx-push-url="true" hx-target="#content-block" hx-replace="innerHTML">Posts</a>
+
+                <span class="float-right">
+                  <input type="text" placeholder="Search" name="query"
+                  hx-trigger="keyup change delay:250ms"
+                  hx-push-url="true"
+                  hx-target="#content-block"
+                  hx-get="/search"
+                  />
+                  <i class="bi bi-search"></i>
+                </span>
+            </div>
+        </div>
+        <div id="content-block">
+          {% block content %}
+          {% endblock content %}
+        </div>
+      </div>
+
+      <div id="footer">
+        <p class="text-xs text-center m-2">
+          Made by <a href="/" class="underline">Oscar Peace</a>. 
+          Source available at <a class="underline" target="_blank" href="https://github.com/sccreeper/portfolio"><i class="bi bi-github"></i> sccreeper/portfolio</a>.
+        </p>
+      </div>
+  </body>
+</html>
+<!-- Hello there --> 

@@ -1,0 +1,16 @@
+<title hx-swap-oob="outerHTML:title">{{post.title}} - Oscar Peace</title>
+
+<h1><b>{{post.title}}</b></h1>
+<h2>{{post.summary}}</h2>
+<p><b>Tags:</b> {% for tag in post.tags %}
+{{tag}}
+{% endfor %}</p>
+<h2>{{post.authour}} - {{post.published}}</h2>
+<br>
+<div id="blog-content">
+{{content}}
+</div>
+
+<script>
+  hljs.highlightAll();
+</script>

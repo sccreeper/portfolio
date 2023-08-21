@@ -1,0 +1,15 @@
+{% import "components/projectlink.j2" as link%}
+{% macro project(name, description, image, link_href, link_text, icon="git") %}
+<div class="project-div">
+    <div class="p-4">
+        <img src="{{image}}"/>
+    </div>
+    <div class="p-4">
+        <h3 class="text-xl">{{name}}</h3>
+        <br>
+        <p class="text-sm">{{description}}</p>
+        <br>
+        {{link.project_link(link_href, icon, link_text)}}
+    </div>
+</div>
+{% endmacro %}

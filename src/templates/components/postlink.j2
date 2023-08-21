@@ -1,0 +1,9 @@
+{% macro post_link(title, date, summary, url)%}
+
+<div class="post-link" hx-trigger="click" hx-get="/blog/{{url}}" hx-push-url="true" hx-target="#content-block" hx-replace="innerHTML">
+<h3>{{title}}</h3>
+<p><b>{{date}}</b></p>
+<p>{{summary}}</p>
+</div>
+
+{%endmacro%}

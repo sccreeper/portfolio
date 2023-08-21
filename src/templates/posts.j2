@@ -1,0 +1,16 @@
+{% extends "base.j2" %}
+
+{% block head %}
+<meta property="og:title" content="Oscar Peace"/>
+<meta property="og:description" content="Posts"/>
+{% endblock head %}
+
+{% block title %} Posts {% endblock title %}
+
+{% block content %}
+
+{% with posts=posts, count=count %}
+{% include "partials/posts.j2" %}
+{% endwith %}
+
+{% endblock content %}

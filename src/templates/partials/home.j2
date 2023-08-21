@@ -1,0 +1,49 @@
+{%import "components/project.j2" as project%}
+{%import "components/postlink.j2" as postlink%}
+
+<title hx-swap-oob="outerHTML:title">Home - Oscar Peace</title>
+
+<h1>About</h1>
+<p>I'm a 17 year old programmer and map maker from the UK. My main languages are <span class="font-bold text-blue-800">Python</span>, <span class="font-bold text-yellow-400">Javascript</span> and <span class="font-bold text-blue-500">Go</span>.</p>
+<p>As for map making, I mainly make maps for <span class="font-bold text-blue-400">Garry's Mod</span> using <span class="font-bold text-orange-400">Hammer</span>.</p>
+<h1>Posts</h1>
+
+{% for post in posts %}
+
+{{postlink.post_link(
+    post.title,
+    post.published,
+    post.summary,
+    post.url
+)}}
+
+{% endfor %}
+
+<h1>Projects</h1>
+
+{{project.project(
+    "goputer",
+    "A fantasy virtual machine written in Go",
+    "/static/images/goputer_logo.png",
+    "https://goputer.oscarcp.net",
+    "Website",
+    "globe"
+)}}
+
+{{project.project(
+    "Chime",
+    "A music streaming server",
+    "/static/images/chime_logo.png",
+    "https://github.com/sccreeper/chime",
+    "Repository",
+    "git"
+)}}
+
+{{project.project(
+    "image2excel",
+    "A program that converts images into Excel spreadsheets.",
+    "",
+    "https://github.com/sccreeper/image2excel",
+    "Repository",
+    "git"
+)}}

@@ -1,0 +1,14 @@
+{%import "components/postlink.j2" as postlink%}
+
+<b>{{count}} posts</b>
+
+{% for post in posts %}
+
+{{postlink.post_link(
+    post.title,
+    post.published,
+    post.summary,
+    post.url
+)}}
+
+{% endfor %}

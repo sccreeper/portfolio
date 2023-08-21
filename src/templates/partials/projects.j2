@@ -1,0 +1,51 @@
+{%import "components/project.j2" as project %}
+
+<title hx-swap-oob="outerHTML:title">Projects - Oscar Peace</title>
+
+<h1>Projects</h1>
+<p>This page contains a list of all of my projects.</p>
+
+{{project.project(
+    "goputer",
+    "A fantasy virtual machine written in Go",
+    "/static/images/goputer_logo.png",
+    "https://goputer.oscarcp.net",
+    "Website",
+    "globe"
+)}}
+
+{{project.project(
+    "Chime",
+    "A music streaming server. Made using Go, Flutter and Dart",
+    "/static/images/chime_logo.png",
+    "https://github.com/sccreeper/chime",
+    "Repository",
+    "git"
+)}}
+
+{{project.project(
+    "image2excel",
+    "A program that converts images into Excel spreadsheets. Working on support for multithreading and video. Written in Go, originally written in Python.",
+    "",
+    "https://github.com/sccreeper/image2excel",
+    "Repository",
+    "git"
+)}}
+
+{{project.project(
+    "BetterClassCharts",
+    "My own version of my schools homework app written in Python using Kivy (No longer maintained).",
+    "",
+    "https://github.com/sccreeper/BetterClassCharts",
+    "Repository",
+    "git"
+)}}
+
+{{project.project(
+    "replbot",
+    "A Discord bot written in Go that allows for execution of JS from the a Discord client.",
+    "",
+    "https://github.com/sccreeper/replbot",
+    "Repository",
+    "git"
+)}}

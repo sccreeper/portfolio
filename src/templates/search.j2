@@ -1,0 +1,18 @@
+{% extends "base.j2" %}
+
+{% block head %}
+<meta property="og:title" content="Oscar Peace"/>
+<meta property="og:description" content="Search"/>
+{% endblock head %}
+
+{% block title %}
+Search
+{% endblock title %}
+
+{% block content %}
+
+{% with posts=posts, time=time, count=count %}
+{% include "partials/search.j2" %}
+{% endwith %}
+
+{% endblock content %}

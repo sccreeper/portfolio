@@ -1,0 +1,22 @@
+{% extends "base.j2" %}
+
+{%block head%}
+
+<meta property="og:title" content="{{post.title}}"/>
+<meta property="og:type" content="article"/>
+<meta property="og:image" content="/og/{{post.url}}"/>
+<meta property="og:description" content="{{post.published}} - {{post.summary}}"/>
+
+{%endblock head%}
+
+{% block title %}
+{{title}}
+{% endblock title %}
+
+{% block content %}
+
+{% with post=post, content=content %}
+  {% include "partials/blogpost.j2"%}
+{% endwith %}
+
+{% endblock content %}

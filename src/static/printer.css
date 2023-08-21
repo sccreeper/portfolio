@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css");
+
+html {
+    font-family: 'Fira Mono', monospace !important;
+    color: black !important;
+}
+
+#content {
+    margin: auto !important;
+    width: 95% !important;
+    border: black 1pt solid;
+    padding: 8pt;
+}
+
+li {
+    list-style: none;
+}
+
+li::before {
+    content: "- ";
+}
+
+#footer {
+    text-align: center;
+}
+
+a {
+    text-decoration: underline;
+    color: black;
+}
+
+a:visited {
+    color: black;
+}
+
+h1 {
+    font-size: 16pt;
+}
+
+p {
+    font-size: 14pt;
+}

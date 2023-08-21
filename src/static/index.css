@@ -1,0 +1,253 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    font-family: 'Fira Mono', monospace;
+    color: white;
+}
+
+body {
+    background-color: black;
+}
+
+input[type=text] {
+    @apply bg-black;
+    @apply outline-none;
+    @apply border-b;
+    @apply border-b-white;
+}
+
+input[type=text]::placeholder {
+    @apply text-white;
+}
+
+#navbar>h1 {
+    font-size: 36px;
+    text-decoration: none;
+    font-weight: 400;
+}
+
+#navbar-links>a {
+    text-decoration: underline;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#navbar-links {
+    margin-bottom: 8px;
+}
+
+
+#navbar {
+    padding: 8px;
+}
+
+#content {
+    @apply w-full m-2 sm:w-2/4 sm:m-auto p-4 border-black dark:border-white border sm:mt-4 sm:mb-4;
+}
+
+#footer {
+    width: 100%;
+    text-align: center;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-weight: 400;
+}
+
+h1 {
+    @apply text-xl;
+}
+
+p {
+    @apply text-sm;
+}
+
+a:visited {
+    color: white;
+}
+
+li {
+    @apply text-sm;
+}
+
+li::before {
+    content: "- "
+}
+
+.project-div {
+    @apply m-4;
+    @apply border;
+    @apply border-white;
+    @apply grid;
+    @apply grid-rows-1;
+    @apply grid-cols-2;
+    grid-template-columns: 128px auto;
+}
+
+.project-div>h3 {
+    @apply no-underline;
+}
+
+.project-link {
+    @apply bg-white;
+    @apply text-black;
+    @apply border-white;
+    @apply border;
+    @apply text-sm;
+    @apply text-center;
+    @apply w-full;
+    @apply p-2;
+    @apply transition-all;
+    @apply no-underline;
+}
+
+.project-link:hover {
+    @apply bg-black;
+    @apply text-white;
+}
+
+.project-link:hover>a {
+    @apply text-white;
+    @apply no-underline;
+}
+
+.project-link>a {
+    @apply text-black;
+}
+
+.project-link>a:visited {
+    color: black;
+}
+
+.post-link {
+    @apply cursor-pointer;
+}
+
+/* Blog styles */
+
+code {
+    @apply border;
+    @apply border-white;
+    @apply p-1;
+    @apply rounded-sm;
+    @apply text-sm;
+}
+
+#blog-content a {
+    @apply underline;
+}
+
+#blog-content img {
+    @apply m-2;
+    @apply border;
+    @apply border-white;
+}
+
+#blog-content figcaption {
+    text-align: center;
+    @apply text-sm;
+    @apply italic;
+}
+
+/* HLJS */
+
+.hljs {
+background: #000000;
+color: #a39e9b;
+@apply m-2; 
+}
+
+.hljs-attr,
+.hljs-template-tag {
+color: #8787d7;
+}
+
+.hljs-comment,
+.hljs-doctag,
+.hljs-quote {
+color: #339966;
+}
+
+.hljs-params {
+color: #a39e9b;
+}
+
+.hljs-regexp {
+color: #d700ff;
+}
+
+.hljs-tag,
+.hljs-selector-id,
+.hljs-number,
+.hljs-literal {
+color: #ef5350;
+}
+
+.hljs-meta,
+.hljs-meta .hljs-keyword {
+
+color: #0087ff;
+}
+
+/* opt-out */
+.hljs-operator,
+.hljs-punctuation{
+}
+
+.hljs-selector-class,
+.hljs-code,
+.hljs-formula,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-link,
+.hljs-keyword {
+color: #64b5f6;
+}
+
+.hljs-built_in,
+.hljs-title,
+.hljs-deletion {
+color: #ff8700;
+}
+
+.hljs-type,
+.hljs-section,
+.hljs-function,
+.hljs-name,
+.hljs-property,
+.hljs-attribute {
+color: #ffd75f;
+}
+
+.hljs-meta .hljs-string,
+.hljs-string,
+.hljs-subst,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+color: #558b2f;
+}
+
+.hljs-selector-tag {
+color: #9966ff;
+}
+
+.hljs-emphasis {
+font-style: italic;
+}
+
+.hljs-strong {
+font-weight: bold;
+}
+
