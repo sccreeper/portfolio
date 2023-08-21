@@ -91,6 +91,7 @@ li::before {
     @apply grid-rows-1;
     @apply grid-cols-2;
     grid-template-columns: 128px auto;
+    @apply p-4;
 }
 
 .project-div>h3 {
