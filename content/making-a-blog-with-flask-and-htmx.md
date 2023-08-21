@@ -10,8 +10,27 @@ Why [HTMX](https://htmx.org/) for something like a blog? Why not just use someth
 
 Adding the first page to my blog was pretty simple, this was just a case of copying my old website code, converting it into [Jinja templates](https://jinja.palletsprojects.com/en/3.1.x/) with a base template and a partial home template and setting up Tailwind CSS.
 
-```python
-print("hello world")
+```
+
+{# The full file for the homepage that extends base.j2 using the partial file for home.j2 #}
+
+{% extends "base.j2" %}
+
+{% block head %}
+<meta property="og:title" content="Oscar Peace"/>
+<meta property="og:description" content="Home"/>
+{% endblock head %}
+
+{% block title %} Home {% endblock title %}
+
+{% block content %}
+
+{% with posts=posts %}
+{% include "partials/home.j2" %}
+{% endwith %}
+
+{% endblock content %}
+
 ```
 
 # Adding more pages
@@ -25,7 +44,7 @@ Adding more pages to my website was just as easy, all I had to do was create a `
 ![](/content/assets/navigation%20with%20HTMX.gif "Page navigation with HTMX")
 <figcaption>Page navigation with HTMX</figcaption>
 
-Then using the [hx-swap-oob](https://htmx.org/attributes/hx-swap-oob/), which allows you to swap any element on the web page not just the one specified in the `hx-select` on the element that triggers the HTMX request, I could change things like the page title as well. This removes the need to write any client-side DOM manipulation code whatsoever. **HTMX controls all.**
+Then using the [hx-swap-oob](https://htmx.org/attributes/hx-swap-oob/) attribute, which allows you to swap any element on the web page not just the one specified in the `hx-select` on the element that triggers the HTMX request, I could change things like the page title in the header as well. This removes the need to write any client-side DOM manipulation code whatsoever. **HTMX controls all.**
 
 ```html
 <title hx-swap-oob="outerHTML:title">title text here</title>
