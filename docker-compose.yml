@@ -6,4 +6,6 @@ services:
     build: .
     ports:
       - "8000:8000"
+    volumes:
+      - "~/.portfolio:/var/lib/portfolio"
     restart: unless-stopped

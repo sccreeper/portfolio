@@ -95,3 +95,7 @@ After I finished adding all the necessary features I added:
 - And page tags.
 
 In conclusion this was probably one of the easiest web development experiences I've ever had, which makes sense as HTMX isn't too difficult and Python is just pseudocode and I will definitely keep HTMX in mind for projects in the future, it is a very useful tool to have in my toolbox.
+
+# Updates
+
+28/08/23 - Later I added support for a little view counter at the top of the page for the posts just using Python's [sqlite3](https://docs.python.org/3/library/sqlite3.html).

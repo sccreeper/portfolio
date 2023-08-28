@@ -15,7 +15,7 @@
 
 {% block content %}
 
-{% with post=post, content=content %}
+{% with post=post, content=content, views=views %}
   {% include "partials/blogpost.j2"%}
 {% endwith %}
 

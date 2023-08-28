@@ -6,6 +6,16 @@ from dataclasses import dataclass
 import time
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
+import sqlite3 as sql
+
+DATABASE_PATH: str = "/var/lib/portfolio/posts.db"
+DATABASE_SCHEMA: str = """
+CREATE TABLE "posts" (
+	"slug"	TEXT,
+	"views"	INTEGER,
+	PRIMARY KEY("slug")
+);
+"""
 
 @dataclass
 class Post:
@@ -21,6 +31,19 @@ htmx = HTMX(app)
 posts: list[Post] = []
 post_urls: list[str] = []
 
+db: sql.Connection = None
+cur: sql.Cursor = None
+
+# Init database
+
+if not os.path.exists(DATABASE_PATH):
+    db = sql.connect(DATABASE_PATH)
+    db.execute(DATABASE_SCHEMA)
+    cur = db.cursor()
+else:
+    db = sql.connect(DATABASE_PATH)
+    cur = db.cursor()
+
 # Other methods
 
 def post_from_metadata(metadata: dict, url: str) -> Post:
@@ -33,8 +56,17 @@ def post_from_metadata(metadata: dict, url: str) -> Post:
             url=url
         )
 
-async def update_post_views(slug: str):
-    pass
+# Database update methods
+
+def increase_post_views(slug: str) -> None:
+    cur.execute("UPDATE posts SET views = views + 1 WHERE slug = (?)", (slug,))
+    db.commit()
+
+def get_post_views(slug: str) -> int:
+    cur.execute("SELECT views FROM posts WHERE slug = (?)", (slug,))
+    data = cur.fetchone()
+
+    return data[0]
 
 # Load post metadata.
 
@@ -62,6 +94,19 @@ for f in files:
 
         post_urls.append(os.path.splitext(f)[0])
 
+    else:
+        continue
+
+
+# Add any new posts to database
+
+for url in post_urls:
+
+    cur.execute("SELECT * FROM posts WHERE slug = (?)", (url,))
+    
+    if cur.fetchone() == None:
+        cur.execute("INSERT INTO posts (slug, views) VALUES (?, ?)", (url, 0))
+        db.commit()
     else:
         continue
 
@@ -107,10 +152,21 @@ def blog_post(slug=None):
     text = md.convert(f.read())
     f.close()
 
+    # Increase post views & get database data.
+
+    increase_post_views(slug)
+
+
     if htmx:
-        return render_template("partials/blogpost.j2", post=post_from_metadata(md.Meta, slug), content=text)
+        return render_template("partials/blogpost.j2", post=post_from_metadata(md.Meta, slug), content=text, views=get_post_views(slug))
     else:
-        return render_template("blogpost.j2", post=post_from_metadata(md.Meta, f"{slug}"), content=text, title=md.Meta["title"][0])
+        return render_template(
+            "blogpost.j2", 
+            post=post_from_metadata(md.Meta, f"{slug}"), 
+            content=text, 
+            title=md.Meta["title"][0], 
+            views=get_post_views(slug)
+        )
 
 @app.route("/content/<path:path>", methods=["GET"])
 def blog_content(path=None):
