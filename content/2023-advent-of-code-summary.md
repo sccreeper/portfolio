@@ -3,7 +3,7 @@ Summary:    Advent of code 2023 from start to (close to) finish
 Authour: Oscar Peace
 Tags: AOC
       Go
-Published: 1/1/1970
+Published: 19/12/2023
 
 This is a megapost talking about every [Advent of Code](https://adventofcode.com) day for 2023, including the ones I didn't finish or attempt.
 
