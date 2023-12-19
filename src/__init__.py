@@ -1,0 +1,1 @@
+APPS_DATA_PATH: str = "/var/lib/portfolio/apps"

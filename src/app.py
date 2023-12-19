@@ -8,6 +8,8 @@ from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import sqlite3 as sql
 
+from src import APPS_DATA_PATH
+
 DATABASE_PATH: str = "/var/lib/portfolio/posts.db"
 DATABASE_SCHEMA: str = """
 CREATE TABLE "posts" (
@@ -67,6 +69,19 @@ def get_post_views(slug: str) -> int:
     data = cur.fetchone()
 
     return data[0]
+
+# Register sub-apps
+
+print("Registering apps...")
+
+print( os.path.exists(APPS_DATA_PATH))
+
+if not os.path.exists(APPS_DATA_PATH):
+    os.mkdir(APPS_DATA_PATH)
+
+from src.apps.random_image import random_image
+
+app.register_blueprint(random_image.random_image_app)
 
 # Load post metadata.
 

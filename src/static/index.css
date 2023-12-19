@@ -71,6 +71,10 @@ p {
     @apply text-sm;
 }
 
+.MathJax {
+    @apply text-base;
+}
+
 a:visited {
     color: white;
 }
