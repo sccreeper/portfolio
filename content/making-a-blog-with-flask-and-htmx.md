@@ -4,7 +4,7 @@ Authour: Oscar Peace
 Tags: Python
       Flask
       HTMX
-Published: 18/03/2023
+Published: 18/8/2023
 
 Why [HTMX](https://htmx.org/) for something like a blog? Why not just use something like [Hugo](https://gohugo.io/)/[Jekyll](https://jekyllrb.com/) or if you wanted to be on the "bleeding edge" of web development, use something that would be almost certainly be overkill like SvelteKit or Next.js?. Because HTMX and a light web framework such as [Flask](https://flask.palletsprojects.com) can achieve everything those libraries and applications can with much less hassle. Also I like making stuff myself and HTMX is cool.
 

@@ -4,9 +4,11 @@ import markdown
 import os
 from dataclasses import dataclass
 import time
+from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import sqlite3 as sql
+import operator
 
 from src import APPS_DATA_PATH
 
@@ -19,14 +21,16 @@ CREATE TABLE "posts" (
 );
 """
 
-@dataclass
-class Post:
+@dataclass(order=True)
+class Post():
     title: str
     summary: str
     authour: str
     tags: list[str]
     published: str
     url: str
+
+    timestamp: int
 
 app = Flask(__name__)
 htmx = HTMX(app)
@@ -49,12 +53,16 @@ else:
 # Other methods
 
 def post_from_metadata(metadata: dict, url: str) -> Post:
+
+    t = metadata["published"][0].split("/")
+
     return Post(
             title=metadata["title"][0],
             summary=metadata["summary"][0],
             authour=metadata["authour"][0],
             tags=metadata["tags"],
             published=metadata["published"][0],
+            timestamp=datetime(year=int(t[2]),month=int(t[1]),day=int(t[0])).timestamp(),
             url=url
         )
 
@@ -124,6 +132,11 @@ for url in post_urls:
         db.commit()
     else:
         continue
+
+# Sort posts
+
+posts = sorted(posts, key=operator.attrgetter("timestamp"))
+posts.reverse()
 
 print(f"Found and processed {len(posts)} post(s)")
 

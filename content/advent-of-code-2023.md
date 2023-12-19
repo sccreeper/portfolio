@@ -3,7 +3,7 @@ Summary: My first advent of code
 Authour: Oscar Peace
 Tags: Go
       AOC
-Published: 1/12/23
+Published: 1/12/2023
 
 This is my first ever year actually doing this. I considered maybe working on [goputer](https://www.github.com/sccreeper/goputer) so I complete it using that, but considering I had never done it before and didn't know what it was going to be like, and the fact that there were *still* some bugs (my fault) with the runtime that couldn't be ironed out before it started, I ended up using Go.
 

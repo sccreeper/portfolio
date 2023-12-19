@@ -3,7 +3,7 @@ Summary: Being an absolute beginner with vinyl records
 Authour: Oscar Peace
 Tags: Other
       Music
-Published: 11/10/23
+Published: 11/10/2023
 
 I've always listened to digital music, mostly through Spotify. However recently I've realised that platforms like Spotify are quite bad (how does making a song and only earning [$0.003 per stream sound?](https://www.musicgateway.com/blog/music-distribution/how-much-does-spotify-pay-per-stream) Not good right?). I also prefer ownership of the media I use. This initially led me to start developing [Chime](https://github.com/sccreeper/chime) for digital music (yes, I know that things like [Jellyfin](https://github.com/jellyfin/jellyfin) exist, It's for personal use if it develops into something more then so be it). But I still wanted to have actual physical representations of my music. This is where vinyl comes in.
 
