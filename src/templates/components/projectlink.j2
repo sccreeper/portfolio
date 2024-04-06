@@ -1,7 +1,7 @@
 {# Link to a external project page #}
 
 {%macro project_link(url, icon, text)%}
-<a href="{{url}}">
+<a href="{{url}}" target="_blank">
 <div class="project-link"><i class="bi bi-{{icon}}"></i> {{text}}</div>
 </a>
 {%endmacro%}
