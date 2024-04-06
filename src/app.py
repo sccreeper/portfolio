@@ -1,6 +1,7 @@
 from flask import Flask, render_template, abort, send_file, request
 from flask_htmx import HTMX
 import markdown
+from markdown.treeprocessors import PrettifyTreeprocessor
 import os
 from dataclasses import dataclass
 import time
@@ -11,6 +12,7 @@ import sqlite3 as sql
 import operator
 
 from src import APPS_DATA_PATH
+from src.caption_extension import ImageCaptionExtension
 
 DATABASE_PATH: str = "/var/lib/portfolio/posts.db"
 DATABASE_SCHEMA: str = """
@@ -81,8 +83,6 @@ def get_post_views(slug: str) -> int:
 # Register sub-apps
 
 print("Registering apps...")
-
-print( os.path.exists(APPS_DATA_PATH))
 
 if not os.path.exists(APPS_DATA_PATH):
     os.mkdir(APPS_DATA_PATH)
@@ -175,7 +175,7 @@ def blog_post(slug=None):
     
     # Parse post
 
-    md = markdown.Markdown(extensions=["meta", "fenced_code", "attr_list"])
+    md = markdown.Markdown(extensions=["meta", "fenced_code", "attr_list", ImageCaptionExtension()])
     f = open(f"content/{slug}.md", "r")
     text = md.convert(f.read())
     f.close()

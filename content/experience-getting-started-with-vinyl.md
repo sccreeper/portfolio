@@ -17,7 +17,6 @@ Arguably the most important part of a record setup is the turntable, no turntabl
 After some research I found out what a phono preamp was, and I included that in the list of requirements as well, after figuring out that getting a decent standalone one wasn't going to fit into my budget. I was also strongly steered away from those hipster looking briefcase style record players.
 
 ![](/content/assets/turntable.jpg "LP60X USB")
-<figcaption>LP60X USB</figcaption>
 
 After doing quite a few Google searches for "best budget turntable" (p.s. the internet for reviews sucks nowadays, a lot of websites come across like ChatGPT assisted recycled content), I settled on the Audio Technica LP60XUSB. The "USB" wasn't particularly important to me, but it allowed me to rip my records to my computer if I desired. It also included a preamp, which could be switched off if I wanted to, meaning I could upgrade it with a better preamp down the line if I wanted to. It fit under my budget and could be found on Amazon at ~£150.
 
@@ -29,13 +28,11 @@ One thing I'd wish I'd known before doing this is how relatively expensive half-
 
 After reading about the grading, I got some records to start my collection, 2 new, and 2 second hand.
 
-![](/content/assets/records.jpg "Records on carpet")
-<figcaption>From L-R: Californication, Whatever Peoiple Say I Am That's What I'm Not, A New World Record, The Age of Consent</figcaption>
+![](/content/assets/records.jpg "From L-R: Californication, Whatever Peoiple Say I Am That's What I'm Not, A New World Record, The Age of Consent")
 
 The Age Of Consent was in reasonably good condition, only problem with it was dust, which to be honest was the same across all the records after I played them a few times. The crackling only happened a few times in each record and was unnoticeable when audio was actually playing. 
 
 ![](/content/assets/age%20of%20consent.jpg "The Age of Consent")
-<figcaption>Age Of Consent</figcaption>
 
 # Other things
 

@@ -42,7 +42,6 @@ Adding more pages to my website was just as easy, all I had to do was create a `
 - If no we return the complete webpage to the browser.
 
 ![](/content/assets/navigation%20with%20HTMX.gif "Page navigation with HTMX")
-<figcaption>Page navigation with HTMX</figcaption>
 
 Then using the [hx-swap-oob](https://htmx.org/attributes/hx-swap-oob/) attribute, which allows you to swap any element on the web page not just the one specified in the `hx-select` on the element that triggers the HTMX request, I could change things like the page title in the header as well. This removes the need to write any client-side DOM manipulation code whatsoever. **HTMX controls all.**
 
@@ -61,7 +60,6 @@ When a user visited the site I would then render the summaries (title, date publ
 When one of these summaries was clicked, HTMX would send a request to the server and as before would swap out the content block of the page with the server response.
 
 ![](/content/assets/viewing%20blog%20post.gif "First blog post view")
-<figcaption>First blog post view</figcaption>
 
 # Search
 
@@ -83,8 +81,6 @@ The above code sends a GET request to the server with the content of the search 
 The response is then a list of posts that contain whatever the user has inputted.
 
 ![](/content/assets/search.gif "Searching")
-
-<figcaption>Searching</figcaption>
 
 # Conclusion
 
