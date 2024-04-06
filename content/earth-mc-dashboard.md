@@ -4,7 +4,7 @@ Authour: Oscar Peace
 Tags: Svelte
       SvelteKit
       Minecraft
-Published: 1/1/1970
+Published: 6/4/2024
 
 ![](/content/assets/earthmc/final_product.png "The final product")
 
