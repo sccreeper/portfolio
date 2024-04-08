@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+img {
+    @apply border;
+    @apply border-black;
+    @apply dark:border-white;
+    @apply cursor-pointer;
+}
+
+figcaption {
+    @apply italic;
+    @apply text-center;
+}
+
+#number-container {
+    @apply select-none;
+    @apply flex;
+    @apply flex-row;
+    @apply justify-center;
+    @apply items-center;
+    @apply gap-4;
+    @apply text-lg;
+}
+
+/* The <b> doesn't actually do anything but would appear confusing to user if it didn't look clickable. */
+#number-container b, #number-container span {
+    @apply cursor-pointer;
+}

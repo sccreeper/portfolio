@@ -31,7 +31,15 @@ For generating types that I could use easily in my code, I used a JSON to JSDoc 
 
 This made it pretty easy to implement views for towns, residents and players once I had developed a few basic general use components to build with though.
 
-![](/content/assets/earthmc/nation_view.png "View for a nation")
+////
+
+/content/assets/earthmc/nation_view.png View for a nation
+
+/content/assets/earthmc/player_view.png View for a player
+
+/content/assets/earthmc/town_view.png View for a town
+
+////
 
 # Things I like & dislike
 
