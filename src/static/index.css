@@ -73,9 +73,23 @@ h5 {
     font-weight: 400;
 }
 
+#blog-content {
+    h1 {
+        @apply font-semibold;
+    }
+
+    h2 {
+        @apply font-medium;
+    }
+}
+
 h1 {
     @apply text-xl;
 }
+
+h2 {
+    @apply text-lg;
+};
 
 p {
     @apply text-base;
@@ -223,6 +237,16 @@ code {
     text-align: center;
     @apply text-sm;
     @apply italic;
+}
+
+#blog-content blockquote {
+    @apply ml-4;
+    @apply pl-4;
+    @apply mb-3;
+    @apply mt-3;
+    @apply border-l;
+    @apply border-l-black;
+    @apply dark:border-l-white;
 }
 
 /* HLJS */

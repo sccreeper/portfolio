@@ -1,7 +1,6 @@
 from flask import Flask, render_template, abort, send_file, request
 from flask_htmx import HTMX
 import markdown
-from markdown.treeprocessors import PrettifyTreeprocessor
 import os
 from dataclasses import dataclass
 import time
@@ -14,6 +13,7 @@ import operator
 from src import APPS_DATA_PATH
 from src.caption_extension import ImageCaptionExtension
 from src.slideshow_extension import SlideshowExtension
+from src.anchor_target_extension import AnchorTargetExtension
 
 DATABASE_PATH: str = "/var/lib/portfolio/posts.db"
 DATABASE_SCHEMA: str = """
@@ -176,7 +176,7 @@ def blog_post(slug=None):
     
     # Parse post
 
-    md = markdown.Markdown(extensions=["meta", "fenced_code", "attr_list", ImageCaptionExtension(), SlideshowExtension()])
+    md = markdown.Markdown(extensions=["meta", "fenced_code", "attr_list", ImageCaptionExtension(), SlideshowExtension(), AnchorTargetExtension()])
     f = open(f"content/{slug}.md", "r")
     text = md.convert(f.read())
     f.close()
