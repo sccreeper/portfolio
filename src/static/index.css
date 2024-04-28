@@ -5,6 +5,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* General styles */
+
 html {
     font-family: 'Fira Mono', monospace;
     @apply text-black;
@@ -16,71 +18,12 @@ body {
     @apply dark:bg-black;
 }
 
-input[type=text] {
-    @apply bg-white;
-    @apply dark:bg-black;
-    @apply outline-none;
-    @apply border-b;
-    @apply border-b-black;
-    @apply dark:border-b-white;
-}
-
-input[type=text]::placeholder {
-    @apply text-black;
-    @apply dark:text-white;
-}
-
-#navbar>h1 {
-    font-size: 36px;
-    text-decoration: none;
-    font-weight: 400;
-}
-
-#navbar-links>a {
-    text-decoration: underline;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-#navbar-links {
-    margin-bottom: 8px;
-}
-
-
-#navbar {
-    padding: 8px;
-}
-
-#content {
-    @apply w-full m-2 sm:w-2/4 sm:m-auto p-4 sm:mt-4 sm:mb-4;
-}
-
-#blog-content > p {
-    @apply mt-3;
-    @apply mb-3;
-}
-
-#footer {
-    width: 100%;
-    text-align: center;
-}
-
 h1,
 h2,
 h3,
 h4,
 h5 {
     font-weight: 400;
-}
-
-#blog-content {
-    h1 {
-        @apply font-semibold;
-    }
-
-    h2 {
-        @apply font-medium;
-    }
 }
 
 h1 {
@@ -106,6 +49,73 @@ a:visited {
 
 li::before {
     content: " - "
+}
+
+/* Input styling */
+
+input[type=text] {
+    @apply bg-white;
+    @apply dark:bg-black;
+    @apply outline-none;
+    @apply border-b;
+    @apply border-b-black;
+    @apply dark:border-b-white;
+}
+
+input[type=text]::placeholder {
+    @apply text-black;
+    @apply dark:text-white;
+}
+
+select {
+    @apply bg-transparent;
+    @apply border-b;
+
+    @apply border-b-black;
+    @apply dark:border-b-white;
+}
+
+button {
+    @apply underline;
+}
+
+/* Navbar */
+
+#navbar>h1 {
+    font-size: 36px;
+    text-decoration: none;
+    font-weight: 400;
+}
+
+#navbar-links>a {
+    text-decoration: underline;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#navbar-links {
+    margin-bottom: 8px;
+}
+
+
+#navbar {
+    padding: 8px;
+}
+
+/* Content */
+
+#content {
+    @apply w-full m-2 sm:w-2/4 sm:m-auto p-4 sm:mt-4 sm:mb-4;
+}
+
+#blog-content > p {
+    @apply mt-3;
+    @apply mb-3;
+}
+
+#footer {
+    width: 100%;
+    text-align: center;
 }
 
 .project-div {
@@ -213,6 +223,16 @@ li::before {
 
 /* Blog styles */
 
+#blog-content {
+    h1 {
+        @apply font-semibold;
+    }
+
+    h2 {
+        @apply font-medium;
+    }
+}
+
 code {
     @apply border;
     @apply border-black;
@@ -247,6 +267,19 @@ code {
     @apply border-l;
     @apply border-l-black;
     @apply dark:border-l-white;
+}
+
+.header { 
+
+    h1, h2, h3 {
+        @apply inline;
+    }
+
+    a { 
+        @apply !no-underline;
+        @apply mr-2;
+    }
+
 }
 
 /* HLJS */

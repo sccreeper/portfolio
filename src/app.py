@@ -9,11 +9,13 @@ from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import sqlite3 as sql
 import operator
+from enum import Enum
 
 from src import APPS_DATA_PATH
 from src.caption_extension import ImageCaptionExtension
 from src.slideshow_extension import SlideshowExtension
 from src.anchor_target_extension import AnchorTargetExtension
+from src.header_anchor_extension import HeaderAnchorExtension
 
 DATABASE_PATH: str = "/var/lib/portfolio/posts.db"
 DATABASE_SCHEMA: str = """
@@ -34,6 +36,16 @@ class Post():
     url: str
 
     timestamp: int
+    length: int
+
+class SortProp(Enum):
+    TIMESTAMP = 1
+    TITLE = 2
+    LENGTH = 3
+
+class SortDirection(Enum):
+    DESC = 1
+    ASC = 2
 
 app = Flask(__name__)
 htmx = HTMX(app)
@@ -42,6 +54,11 @@ post_urls: list[str] = []
 
 db: sql.Connection = None
 cur: sql.Cursor = None
+
+# Remove whitespace in jinja
+
+app.jinja_env.trim_blocks = True
+app.jinja_env.lstrip_blocks = True
 
 # Init database
 
@@ -55,7 +72,7 @@ else:
 
 # Other methods
 
-def post_from_metadata(metadata: dict, url: str) -> Post:
+def post_from_metadata(metadata: dict, url: str, length: int) -> Post:
 
     t = metadata["published"][0].split("/")
 
@@ -66,7 +83,8 @@ def post_from_metadata(metadata: dict, url: str) -> Post:
             tags=metadata["tags"],
             published=metadata["published"][0],
             timestamp=datetime(year=int(t[2]),month=int(t[1]),day=int(t[0])).timestamp(),
-            url=url
+            url=url,
+            length=length,
         )
 
 # Database update methods
@@ -107,14 +125,18 @@ for f in files:
     if os.path.splitext(f)[1] == ".md":
 
         post = open(f"{f}", "r")
-        md.convert(post.read())
-        post.close()
+        text = post.read()
+        md.convert(text)
         
-        posts.append(post_from_metadata(
-            md.Meta,
-            os.path.splitext(f)[0]
-            
-        ))
+        posts.append(
+            post_from_metadata(
+                md.Meta,
+                os.path.splitext(f)[0],
+                len(text.split(" ")),   
+            )
+        )
+
+        post.close()
 
         post_urls.append(os.path.splitext(f)[0])
 
@@ -176,7 +198,7 @@ def blog_post(slug=None):
     
     # Parse post
 
-    md = markdown.Markdown(extensions=["meta", "fenced_code", "attr_list", ImageCaptionExtension(), SlideshowExtension(), AnchorTargetExtension()])
+    md = markdown.Markdown(extensions=["meta", "fenced_code", "attr_list", ImageCaptionExtension(), SlideshowExtension(), AnchorTargetExtension(), HeaderAnchorExtension()])
     f = open(f"content/{slug}.md", "r")
     text = md.convert(f.read())
     f.close()
@@ -187,11 +209,11 @@ def blog_post(slug=None):
 
 
     if htmx:
-        return render_template("partials/blogpost.j2", post=post_from_metadata(md.Meta, slug), content=text, views=get_post_views(slug))
+        return render_template("partials/blogpost.j2", post=post_from_metadata(md.Meta, slug, 0), content=text, views=get_post_views(slug))
     else:
         return render_template(
             "blogpost.j2", 
-            post=post_from_metadata(md.Meta, f"{slug}"), 
+            post=post_from_metadata(md.Meta, f"{slug}", 0), 
             content=text, 
             title=md.Meta["title"][0], 
             views=get_post_views(slug)
@@ -233,13 +255,30 @@ def search():
 
 @app.route("/posts", methods=["GET"])
 def _posts():
+    # Sort the posts based on form data.
+
+    sort_prop: SortProp
+    sort_dir: SortDirection
+
+    if len(request.args) == 0 or not "prop" in request.args or not "dir" in request.args:
+        sort_prop = SortProp.TIMESTAMP
+        sort_dir = SortDirection.DESC
+    else:
+        sort_prop = SortProp[request.args["prop"].upper()]
+        sort_dir = SortDirection[request.args["dir"].upper()]
+
+    _posts_temp = posts
+    _posts_temp.sort(key=operator.attrgetter(sort_prop.name.lower()), reverse=(sort_dir == SortDirection.DESC))
+
     if htmx:
-        return render_template("partials/posts.j2", posts=posts, count=len(posts))
+        return render_template("partials/posts.j2", posts=_posts_temp, count=len(_posts_temp), prop=sort_prop.name.lower(), dir=sort_dir.name.lower())
     else:
         return render_template(
             "posts.j2",
-            posts=posts,
-            count=len(posts)
+            posts=_posts_temp,
+            count=len(_posts_temp),
+            prop=sort_prop.name.lower(),
+            dir=sort_dir.name.lower()
         )
 
 @app.route("/og/<slug>")
@@ -254,7 +293,7 @@ def opengraph(slug=None):
         md.convert(f.read())
         f.close()
 
-        p = post_from_metadata(md.Meta, "")
+        p = post_from_metadata(md.Meta, "", 0)
 
         # Create and draw on image
 
@@ -290,4 +329,4 @@ def opengraph(slug=None):
         return send_file(buffer, mimetype="image/png")
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=8000,debug=True)
+    app.run(host="0.0.0.0",port=8000)
