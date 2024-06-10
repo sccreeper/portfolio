@@ -207,16 +207,24 @@ def blog_post(slug=None):
 
     increase_post_views(slug)
 
+    post_data = post_from_metadata(md.Meta, slug, 0)
 
     if htmx:
-        return render_template("partials/blogpost.j2", post=post_from_metadata(md.Meta, slug, 0), content=text, views=get_post_views(slug))
+        return render_template(
+            "partials/blogpost.j2", 
+            post=post_from_metadata(md.Meta, slug, 0), 
+            content=text, 
+            views=get_post_views(slug)
+        )
+     
     else:
         return render_template(
             "blogpost.j2", 
-            post=post_from_metadata(md.Meta, f"{slug}", 0), 
+            post=post_data, 
             content=text, 
             title=md.Meta["title"][0], 
-            views=get_post_views(slug)
+            views=get_post_views(slug),
+            publish_date=datetime.fromtimestamp(post_data.timestamp).date().isoformat()
         )
 
 @app.route("/content/<path:path>", methods=["GET"])
