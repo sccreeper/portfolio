@@ -3,13 +3,13 @@ from flask_htmx import HTMX
 import markdown
 import os
 from dataclasses import dataclass
-import time
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import sqlite3 as sql
 import operator
-from enum import Enum
+from flask_wtf import FlaskForm
+from wtforms.fields import SelectField, StringField
 
 from src import APPS_DATA_PATH
 from src.caption_extension import ImageCaptionExtension
@@ -38,21 +38,23 @@ class Post():
     timestamp: int
     length: int
 
-class SortProp(Enum):
-    TIMESTAMP = 1
-    TITLE = 2
-    LENGTH = 3
+class PostsForm(FlaskForm):
+    class Meta:
+        csrf = False
 
-class SortDirection(Enum):
-    DESC = 1
-    ASC = 2
+    prop = SelectField("Sort by: ", choices=[("timestamp", "Date"), ("title", "Title"), ("length", "Length")], default="timestamp", coerce=str)
+    dir = SelectField("Direction: ", choices=[("asc", "Ascending"), ("desc", "Descending")], default="desc", coerce=str)
+
+    query = StringField("Search: ", default="", render_kw={"placeholder" : "Search"})
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = os.environ["SECRET"]
+
 htmx = HTMX(app)
 posts: list[Post] = []
 post_urls: list[str] = []
 
-db: sql.Connection = None
+con: sql.Connection = None
 cur: sql.Cursor = None
 
 # Remove whitespace in jinja
@@ -63,12 +65,9 @@ app.jinja_env.lstrip_blocks = True
 # Init database
 
 if not os.path.exists(DATABASE_PATH):
-    db = sql.connect(DATABASE_PATH)
-    db.execute(DATABASE_SCHEMA)
-    cur = db.cursor()
-else:
-    db = sql.connect(DATABASE_PATH)
-    cur = db.cursor()
+    con = sql.connect(DATABASE_PATH)
+    con.execute(DATABASE_SCHEMA)
+    con.close()
 
 # Other methods
 
@@ -90,12 +89,22 @@ def post_from_metadata(metadata: dict, url: str, length: int) -> Post:
 # Database update methods
 
 def increase_post_views(slug: str) -> None:
+    con = sql.connect(DATABASE_PATH)
+    cur = con.cursor()
+
     cur.execute("UPDATE posts SET views = views + 1 WHERE slug = (?)", (slug,))
-    db.commit()
+    con.commit()
+
+    con.close()
 
 def get_post_views(slug: str) -> int:
+    con = sql.connect(DATABASE_PATH)
+    cur = con.cursor()
+
     cur.execute("SELECT views FROM posts WHERE slug = (?)", (slug,))
     data = cur.fetchone()
+
+    con.close()
 
     return data[0]
 
@@ -146,15 +155,20 @@ for f in files:
 
 # Add any new posts to database
 
+con = sql.connect(DATABASE_PATH)
+cur = con.cursor()
+
 for url in post_urls:
 
     cur.execute("SELECT * FROM posts WHERE slug = (?)", (url,))
     
     if cur.fetchone() == None:
         cur.execute("INSERT INTO posts (slug, views) VALUES (?, ?)", (url, 0))
-        db.commit()
+        con.commit()
     else:
         continue
+
+con.close()
 
 # Sort posts
 
@@ -231,62 +245,32 @@ def blog_post(slug=None):
 def blog_content(path=None):
     return send_file(f"../content/{path}")
 
-@app.route("/search", methods=["GET"])
-def search():
-    start = time.time() * 1000
-
-    query = request.args["query"].lower()
-    search_results = []
-
-    for post in posts:
-        if (query in post.title.lower() or 
-                query in post.summary.lower() or 
-                query in [tag.lower() for tag in post.tags]):
-            
-            search_results.append(post)
-    
-    if htmx:
-        return render_template(
-            "partials/search.j2", 
-            posts=search_results, 
-            time=(time.time() * 1000) - start,
-            count=len(search_results)
-        )
-    
-    else:
-        return render_template(
-                "search.j2",
-                posts=search_results,
-                time=(time.time() * 1000) - start,
-                count=len(search_results)
-            )
-
 @app.route("/posts", methods=["GET"])
 def _posts():
     # Sort the posts based on form data.
 
-    sort_prop: SortProp
-    sort_dir: SortDirection
+    form: PostsForm = PostsForm(request.args)
 
-    if len(request.args) == 0 or not "prop" in request.args or not "dir" in request.args:
-        sort_prop = SortProp.TIMESTAMP
-        sort_dir = SortDirection.DESC
+    if not form.validate():
+        form.process()
+
+    if not form.query.data == "":
+        app.logger.debug("test")
+        # Worst list comprehension ever written.
+        _posts_temp = [post for post in posts if form.query.data.lower() in post.title.lower() or form.query.data.lower() in [tag.lower() for tag in post.tags]]
     else:
-        sort_prop = SortProp[request.args["prop"].upper()]
-        sort_dir = SortDirection[request.args["dir"].upper()]
+        _posts_temp = posts
 
-    _posts_temp = posts
-    _posts_temp.sort(key=operator.attrgetter(sort_prop.name.lower()), reverse=(sort_dir == SortDirection.DESC))
+    _posts_temp.sort(key=operator.attrgetter(form.prop.data), reverse=(form.dir.data == "desc"))
 
     if htmx:
-        return render_template("partials/posts.j2", posts=_posts_temp, count=len(_posts_temp), prop=sort_prop.name.lower(), dir=sort_dir.name.lower())
+        return render_template("partials/posts.j2", posts=_posts_temp, count=len(_posts_temp), form=form)
     else:
         return render_template(
             "posts.j2",
             posts=_posts_temp,
             count=len(_posts_temp),
-            prop=sort_prop.name.lower(),
-            dir=sort_dir.name.lower()
+            form=form
         )
 
 @app.route("/og/<slug>")
@@ -337,4 +321,7 @@ def opengraph(slug=None):
         return send_file(buffer, mimetype="image/png")
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=8000)
+    if os.environ["DEBUG"] == "true":
+        app.run(host="0.0.0.0",port=8000, debug=True)
+    else:
+        app.run(host="0.0.0.0",port=8000)

@@ -6,24 +6,14 @@
 
 <form hx-get="/posts" hx-target="#content-block" hx-push-url="true">
 
-    <label for="sort_sort">Sort by: </label>
+    {{ form.prop.label }}
+    {{ form.prop() }}
 
-    <select id="sort_dir" name="prop">
+    {{ form.dir.label }}
+    {{ form.dir() }}
 
-        <option value="timestamp" {{ "selected" if prop == "timestamp"}}>Date</option>
-        <option value="title" {{ "selected" if prop == "title" }}>Title</option>
-        <option value="length" {{ "selected" if prop == "length"}}>Length</option>
-
-    </select>
-
-    <label for="sort_dir">Direction: </label>
-
-    <select name="dir" id="sort_dir">
-
-        <option value="desc" {{ "selected" if dir == "desc"}}>Descending</option>
-        <option value="asc" {{ "selected" if dir == "asc"}}>Ascending</option>
-
-    </select>
+    {{ form.query.label }}
+    {{ form.query() }}
 
     <button type="submit">Apply</button>
 

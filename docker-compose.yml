@@ -3,6 +3,9 @@ version: '3'
 services:
   portfolio:
     container_name: portfolio
+    environment:
+      - SECRET
+      - DEBUG
     build: .
     ports:
       - "8000:8000"
