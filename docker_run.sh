@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 
 export DEBUG="false"
 
-if ! [[ -v $SECRET ]]; then
+if ! [[ -n "$SECRET" ]]; then
 
 echo "Error: No secret set"
 exit 1
