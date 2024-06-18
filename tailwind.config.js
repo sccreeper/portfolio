@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/templates/*.{html,j2}"],
+  content: ["./src/templates/**/*.{html,j2}"],
   safelist: [
     "MathJax"
   ],

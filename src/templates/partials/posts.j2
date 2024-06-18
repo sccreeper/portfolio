@@ -1,6 +1,14 @@
 {%import "components/postlink.j2" as postlink%}
 
+<title hx-swap-oob="outerHTML:title">Posts - Oscar Peace</title>
+
 <b>{{count}} posts</b>
+
+<span class="float-right" title="RSS">
+
+    <a class="no-underline" href="/rss" download>RSS Feed <i class="bi bi-rss text-orange-600 dark:text-orange-400"></i></a>
+
+</span>
 
 <br>
 

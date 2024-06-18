@@ -2,7 +2,6 @@ from flask import Flask, render_template, abort, send_file, request
 from flask_htmx import HTMX
 import markdown
 import os
-from dataclasses import dataclass
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
@@ -10,12 +9,14 @@ import sqlite3 as sql
 import operator
 from flask_wtf import FlaskForm
 from wtforms.fields import SelectField, StringField
+import mimetypes
 
-from src import APPS_DATA_PATH
+from src import APPS_DATA_PATH, Post, post_slugs, posts
 from src.caption_extension import ImageCaptionExtension
 from src.slideshow_extension import SlideshowExtension
 from src.anchor_target_extension import AnchorTargetExtension
 from src.header_anchor_extension import HeaderAnchorExtension
+from src.rss import generate_rss_feed, POST_LIMIT
 
 DATABASE_PATH: str = "/var/lib/portfolio/posts.db"
 DATABASE_SCHEMA: str = """
@@ -25,18 +26,6 @@ CREATE TABLE "posts" (
 	PRIMARY KEY("slug")
 );
 """
-
-@dataclass(order=True)
-class Post():
-    title: str
-    summary: str
-    authour: str
-    tags: list[str]
-    published: str
-    url: str
-
-    timestamp: int
-    length: int
 
 class PostsForm(FlaskForm):
     class Meta:
@@ -51,8 +40,6 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ["SECRET"]
 
 htmx = HTMX(app)
-posts: list[Post] = []
-post_urls: list[str] = []
 
 con: sql.Connection = None
 cur: sql.Cursor = None
@@ -147,7 +134,7 @@ for f in files:
 
         post.close()
 
-        post_urls.append(os.path.splitext(f)[0])
+        post_slugs.append(os.path.splitext(f)[0])
 
     else:
         continue
@@ -158,7 +145,7 @@ for f in files:
 con = sql.connect(DATABASE_PATH)
 cur = con.cursor()
 
-for url in post_urls:
+for url in post_slugs:
 
     cur.execute("SELECT * FROM posts WHERE slug = (?)", (url,))
     
@@ -172,8 +159,8 @@ con.close()
 
 # Sort posts
 
-posts = sorted(posts, key=operator.attrgetter("timestamp"))
-posts.reverse()
+posts = sorted(posts, key=operator.attrgetter("timestamp"), reverse=True)
+post_slugs.reverse()
 
 print(f"Found and processed {len(posts)} post(s)")
 
@@ -207,7 +194,7 @@ def projects():
 
 @app.route("/blog/<slug>", methods=["GET"])
 def blog_post(slug=None):
-    if not slug in post_urls:
+    if not slug in post_slugs:
         return abort(404)
     
     # Parse post
@@ -275,7 +262,7 @@ def _posts():
 
 @app.route("/og/<slug>")
 def opengraph(slug=None):
-    if not slug in post_urls:
+    if not slug in post_slugs:
         return abort(404)
     else:
         # Open post MD
@@ -318,7 +305,20 @@ def opengraph(slug=None):
         img.save(buffer, "PNG")
         buffer.seek(0)
         
-        return send_file(buffer, mimetype="image/png")
+        return send_file(buffer, mimetype=mimetypes.types_map[".png"])
+
+@app.route("/rss", methods=["GET"])
+def _rss():
+    buffer = BytesIO()
+    buffer.write(generate_rss_feed(posts[:POST_LIMIT]))
+    buffer.seek(0)
+
+    return send_file(
+        buffer,
+        as_attachment=True,
+        download_name="rss.xml",
+        mimetype=mimetypes.types_map[".xml"]
+    )
 
 if __name__ == "__main__":
     if os.environ["DEBUG"] == "true":
