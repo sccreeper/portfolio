@@ -1,4 +1,4 @@
-from src import Post, post_slugs
+from src import Post
 from src.feeds import DEFAULT_DESCRIPTION, DEFAULT_TITLE, DEFAULT_URL, FeedInterface
 from datetime import datetime
 import html
@@ -20,13 +20,13 @@ _ID.text = html.escape(DEFAULT_URL) + "/"
 
 ET.SubElement(_ROOT, "link", attrib={"href" : "https://www.oscarcp.net/feeds/atom", "rel":"self", "type":"application/atom+xml"})
 
-def _post_to_element(post: Post, slug: str) -> ET.Element:
+def _post_to_element(post: Post) -> ET.Element:
     root = ET.Element("entry")
     title = ET.SubElement(root, "title")
     title.text = post.title
     ET.SubElement(root, "link", attrib={"href":"https://www.oscarcp.net/"})
     _id = ET.SubElement(root, "id")
-    _id.text = f"https://www.oscarcp.net/blog/{slug}"
+    _id.text = f"https://www.oscarcp.net/blog/{post.url}"
     updated = ET.SubElement(root, "updated")
     updated.text = datetime.fromtimestamp(post.timestamp).isoformat()
     summary = ET.SubElement(root, "summary")
@@ -47,7 +47,7 @@ class AtomFeed(FeedInterface):
     def generate_feed(_posts: list[Post]) -> bytes:
         root_copy = _ROOT
 
-        for i, post in enumerate(_posts):
-            root_copy.append(_post_to_element(post, post_slugs[i]))
+        for post in _posts:
+            root_copy.append(_post_to_element(post))
 
         return ET.tostring(root_copy)

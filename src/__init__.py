@@ -1,7 +1,4 @@
 from dataclasses import dataclass
-from xml.etree import ElementTree as ET
-from datetime import datetime
-from email.utils import format_datetime
 
 APPS_DATA_PATH: str = "/var/lib/portfolio/apps"
 

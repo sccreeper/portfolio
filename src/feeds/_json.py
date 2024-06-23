@@ -1,4 +1,4 @@
-from src import Post, post_slugs
+from src import Post
 from src.feeds import FeedInterface, DEFAULT_TITLE, DEFAULT_DESCRIPTION, DEFAULT_URL
 import datetime
 import json
@@ -21,12 +21,13 @@ class JSONFeed(FeedInterface):
 
         feed_template_copy["items"] = []
 
-        for i, post in enumerate(_posts):
+        for post in _posts:
             feed_template_copy["items"].append(
                 {
-                    "id": f"https://www.oscarcp.net/blog/{post_slugs[i]}",
-                    "url": f"https://www.oscarcp.net/blog/{post_slugs[i]}",
+                    "id": f"https://www.oscarcp.net/blog/{post.url}",
+                    "url": f"https://www.oscarcp.net/blog/{post.url}",
                     "summary": post.summary,
+                    "title": post.title,
                     "content_text": "",
                     "date_published": datetime.datetime.fromtimestamp(post.timestamp).isoformat()
                 }
