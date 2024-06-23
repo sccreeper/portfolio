@@ -16,7 +16,7 @@ from src.caption_extension import ImageCaptionExtension
 from src.slideshow_extension import SlideshowExtension
 from src.anchor_target_extension import AnchorTargetExtension
 from src.header_anchor_extension import HeaderAnchorExtension
-from src.rss import generate_rss_feed, POST_LIMIT
+from src.feeds import feed_registry
 
 DATABASE_PATH: str = "/var/lib/portfolio/posts.db"
 DATABASE_SCHEMA: str = """
@@ -307,17 +307,21 @@ def opengraph(slug=None):
         
         return send_file(buffer, mimetype=mimetypes.types_map[".png"])
 
-@app.route("/rss", methods=["GET"])
-def _rss():
+@app.route("/feeds/<feed_type>", methods=["GET"])
+def _feeds(feed_type: str = None):
+
+    if not feed_type in feed_registry:
+        return abort(404)
+
     buffer = BytesIO()
-    buffer.write(generate_rss_feed(posts[:POST_LIMIT]))
+    buffer.write(feed_registry[feed_type].generate_feed(posts[:5]))
     buffer.seek(0)
 
     return send_file(
         buffer,
         as_attachment=True,
-        download_name="rss.xml",
-        mimetype=mimetypes.types_map[".xml"]
+        download_name=feed_registry[feed_type].file,
+        mimetype=mimetypes.types_map[feed_registry[feed_type].extension]
     )
 
 if __name__ == "__main__":
