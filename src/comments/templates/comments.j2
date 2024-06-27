@@ -1,0 +1,52 @@
+<div id="comments-container">
+
+{%import "comment.j2" as comment%}
+
+<h2>{{ comments|length }} {{ "Comment" if comments|length == 1 else "Comments" }}</h2>
+
+{% if enabled %}
+
+<form hx-post="/comments/post" hx-swap="outerHTML" hx-target="#comments-container">
+
+{{ form.hidden_tag() }}
+
+{{ form.name() }}
+<br>
+{{ form.comment() }}
+<br>
+
+{% for field, error_list in form.errors.items() %}
+
+{% for error in error_list %}
+    <p class="text-red-500 dark:text-red-400">{{ error }}</p>
+{% endfor %}
+
+{% endfor %}
+
+<button type="submit" class="mb-2">Post</button>
+
+</form>
+
+{% else %}
+
+<p> Posting comments is disabled at the moment. </p>
+
+{% endif %}
+
+
+<br>
+
+{# Expects a Comment class as defined in src/comments/__init__.py #}
+
+{% for c in comments %}
+
+    {{ comment.comment(
+        c.id,
+        c.name,
+        c.date,
+        c.comment
+    ) }}
+
+{% endfor %}
+
+</div>

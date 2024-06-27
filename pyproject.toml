@@ -15,6 +15,7 @@ flask-htmx = "^0.3.1"
 markdown = "^3.4.4"
 pillow = "^10.0.0"
 flask-wtf = "^1.2.1"
+flask-limiter = "^3.7.0"
 
 
 [build-system]

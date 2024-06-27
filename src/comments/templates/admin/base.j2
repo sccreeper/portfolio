@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<head>
+
+<script src="https://unpkg.com/htmx.org@2.0.0/dist/htmx.min.js"></script>
+
+{% block head %}{% endblock head %}
+
+<title>{% block title %}{% endblock title %} - Comments admin</title>
+
+</head>
+
+<html lang="en">
+
+    <body>
+
+        <h1>Comments admin</h1>
+        <hr>
+
+        <div id="content-block">
+
+            {% block content %}
+        
+            {% endblock content %}
+
+        </div>
+    
+    </body>
+
+</html>

@@ -1,0 +1,14 @@
+<title hx-swap-oob="outerHTML:title">Login - Comments admin</title>
+
+<form hx-post="/comments/login" hx-target="#content-block">
+
+    <p>{{ message }}</p>
+
+    {{ form.hidden_tag() }}
+
+    {{ form.password.label }}
+    {{ form.password() }}
+
+    <button type="submit">Login</button>
+
+</form>

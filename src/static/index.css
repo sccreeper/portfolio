@@ -53,7 +53,7 @@ li::before {
 
 /* Input styling */
 
-input[type=text] {
+input[type=text],textarea {
     @apply bg-white;
     @apply dark:bg-black;
     @apply outline-none;
@@ -62,7 +62,7 @@ input[type=text] {
     @apply dark:border-b-white;
 }
 
-input[type=text]::placeholder {
+input[type=text]::placeholder,textarea::placeholder {
     @apply text-black;
     @apply dark:text-white;
 }
@@ -77,6 +77,18 @@ select {
 
 button {
     @apply underline;
+}
+
+textarea {
+    @apply w-full;
+    @apply mt-2;
+    @apply mb-2;
+    @apply resize-none;
+    @apply outline-none;
+}
+
+textarea:focus {
+    @apply outline-none;
 }
 
 /* Navbar */
@@ -280,6 +292,14 @@ code {
         @apply mr-2;
     }
 
+}
+.comment {
+    @apply p-1;
+}
+
+.comment:target {
+    @apply border;
+    @apply border-white;
 }
 
 /* HLJS */

@@ -1,4 +1,5 @@
 from flask import Flask, render_template, abort, send_file, request
+import logging
 from flask_htmx import HTMX
 import markdown
 import os
@@ -10,13 +11,16 @@ import operator
 from flask_wtf import FlaskForm
 from wtforms.fields import SelectField, StringField
 import mimetypes
+from flask_wtf import csrf
+from flask_limiter import Limiter
 
-from src import APPS_DATA_PATH, Post, post_slugs, posts
+from src import APPS_DATA_PATH, Post, post_slugs, posts, htmx
 from src.caption_extension import ImageCaptionExtension
 from src.slideshow_extension import SlideshowExtension
 from src.anchor_target_extension import AnchorTargetExtension
 from src.header_anchor_extension import HeaderAnchorExtension
 from src.feeds import feed_registry
+from src.util import format_datetime, get_real_ip
 
 DATABASE_PATH: str = "/var/lib/portfolio/posts.db"
 DATABASE_SCHEMA: str = """
@@ -39,7 +43,19 @@ class PostsForm(FlaskForm):
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ["SECRET"]
 
-htmx = HTMX(app)
+if os.environ["DEBUG"] == "true":
+    app.logger.setLevel(logging.DEBUG)
+else:
+    app.logger.setLevel(logging.INFO)
+
+limiter = Limiter(
+    get_real_ip,
+    app=app,
+    default_limits=["5 per second"],
+    storage_uri="memory://"
+)
+
+htmx.init_app(app)
 
 con: sql.Connection = None
 cur: sql.Cursor = None
@@ -105,6 +121,11 @@ if not os.path.exists(APPS_DATA_PATH):
 from src.apps.random_image import random_image
 
 app.register_blueprint(random_image.random_image_app)
+
+from src.comments import comment_blueprint, get_comments, SubmitCommentForm, COMMENTS_ENABLED
+
+app.register_blueprint(comment_blueprint)
+limiter.limit("60/minute" if os.environ["DEBUG"] == "true" else "30/minute")(comment_blueprint)
 
 # Load post metadata.
 
@@ -197,9 +218,22 @@ def blog_post(slug=None):
     if not slug in post_slugs:
         return abort(404)
     
+    csrf.generate_csrf()
+    
     # Parse post
 
-    md = markdown.Markdown(extensions=["meta", "fenced_code", "attr_list", ImageCaptionExtension(), SlideshowExtension(), AnchorTargetExtension(), HeaderAnchorExtension()])
+    md = markdown.Markdown(
+        extensions=[
+            "meta", 
+            "fenced_code", 
+            "attr_list", 
+            ImageCaptionExtension(), 
+            SlideshowExtension(), 
+            AnchorTargetExtension(), 
+            HeaderAnchorExtension()
+            ]
+        )
+    
     f = open(f"content/{slug}.md", "r")
     text = md.convert(f.read())
     f.close()
@@ -210,12 +244,25 @@ def blog_post(slug=None):
 
     post_data = post_from_metadata(md.Meta, slug, 0)
 
+    form: SubmitCommentForm = SubmitCommentForm()
+    form.slug.data = slug
+
+    comments: list = get_comments(slug)
+    comments = sorted(comments, key=operator.attrgetter("date"), reverse=True)
+
+    for c in comments:
+        c.date = format_datetime(c.date)
+    
     if htmx:
         return render_template(
             "partials/blogpost.j2", 
             post=post_from_metadata(md.Meta, slug, 0), 
             content=text, 
-            views=get_post_views(slug)
+            views=get_post_views(slug),
+            comments=comments,
+            form=form,
+            comments_enabled=COMMENTS_ENABLED,
+
         )
      
     else:
@@ -225,7 +272,10 @@ def blog_post(slug=None):
             content=text, 
             title=md.Meta["title"][0], 
             views=get_post_views(slug),
-            publish_date=datetime.fromtimestamp(post_data.timestamp).date().isoformat()
+            publish_date=datetime.fromtimestamp(post_data.timestamp).date().isoformat(),
+            comments=comments,
+            comments_enabled=COMMENTS_ENABLED,
+            form=form
         )
 
 @app.route("/content/<path:path>", methods=["GET"])
@@ -242,7 +292,6 @@ def _posts():
         form.process()
 
     if not form.query.data == "":
-        app.logger.debug("test")
         # Worst list comprehension ever written.
         _posts_temp = [post for post in posts if form.query.data.lower() in post.title.lower() or form.query.data.lower() in [tag.lower() for tag in post.tags]]
     else:
@@ -326,6 +375,8 @@ def _feeds(feed_type: str = None):
 
 if __name__ == "__main__":
     if os.environ["DEBUG"] == "true":
+        app.logger.debug(f"Environment variables: {os.environ}")
+
         app.run(host="0.0.0.0",port=8000, debug=True)
     else:
         app.run(host="0.0.0.0",port=8000)

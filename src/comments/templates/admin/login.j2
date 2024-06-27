@@ -1,0 +1,15 @@
+{% extends "admin/base.j2" %}
+
+{% block title %}
+Login
+{% endblock title %}
+
+{% block content %}
+
+{% with form=form,message=message %}
+
+{% include "admin/partials/login.j2" %}
+
+{% endwith %}
+
+{% endblock content %}

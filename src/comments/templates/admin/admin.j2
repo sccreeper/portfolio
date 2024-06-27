@@ -1,0 +1,15 @@
+{% extends "admin/base.j2" %}
+
+{% block title %}
+Main
+{% endblock title %}
+
+{% block content %}
+
+    {% with form=form, comments=comments %}
+
+        {% include "admin/partials/admin.j2" %}
+
+    {% endwith %}
+
+{% endblock content %}

@@ -7,9 +7,21 @@ if ! [[ -n "$SECRET" ]]; then
 echo "Error: No secret set"
 exit 1
 
-else
+fi
+
+if ! [[ -n "$COMMENTS" ]]; then
+
+printf "Error: Comments value not set"
+exit 1
+
+fi
+
+if ! [[ -n "$ADMIN_PASS" ]]; then
+
+printf "Error: Admin pass value not set"
+exit 1
+
+fi
 
 docker-compose build
 docker-compose up -d
-
-fi

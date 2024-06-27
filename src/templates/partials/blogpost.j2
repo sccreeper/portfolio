@@ -12,6 +12,13 @@
 {{content}}
 </div>
 
+
+{% with comments=comments, errors=[], enabled=comments_enabled %}
+
+{% include "./comments/comments.j2" %}
+
+{% endwith %}
+
 <script>
   hljs.highlightAll();
 </script>

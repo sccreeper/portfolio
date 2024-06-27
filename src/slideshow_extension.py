@@ -27,7 +27,6 @@ class SlideshowBlockProcessor(BlockProcessor):
             if b == "" or b == "\n":
                 continue
             else:
-                print(b, flush=True)
 
                 data = b.split(" ", 1)
 
