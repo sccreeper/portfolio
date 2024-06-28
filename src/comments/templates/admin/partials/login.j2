@@ -1,8 +1,14 @@
 <title hx-swap-oob="outerHTML:title">Login - Comments admin</title>
 
-<form hx-post="/comments/login" hx-target="#content-block">
+{% for field, error_list in form.errors.items() %}
 
-    <p>{{ message }}</p>
+{% for error in error_list %}
+    <p style="color: red;">{{ error }}</p>
+{% endfor %}
+
+{% endfor %}
+
+<form hx-post="/comments/login" hx-target="#content-block">
 
     {{ form.hidden_tag() }}
 

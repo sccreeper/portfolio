@@ -7,7 +7,6 @@ services:
       - SECRET
       - DEBUG
       - COMMENTS
-      - ADMIN_PASS
     build: .
     ports:
       - "8000:8000"

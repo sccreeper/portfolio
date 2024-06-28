@@ -1,0 +1,32 @@
+<title hx-swap-oob="outerHTML:title">Settings - Comments admin</title>
+
+{% include "admin/partials/components/menu.j2" %}
+
+<h3>Change password</h3>
+
+{% for field, error_list in form.errors.items() %}
+
+{% for error in error_list %}
+    <p style="color: red;">{{ error }}</p>
+{% endfor %}
+
+{% endfor %}
+
+<p>{{ status }}</p>
+
+<form hx-post="/comments/admin/changepassword" hx-target="#content-block" hx-swap="innerHTML">
+
+    {{ form.hidden_tag() }}
+
+    {{ form.old.label }}
+    {{ form.old() }}
+
+    {{ form.new.label }}
+    {{ form.new() }}
+
+    {{ form.confirm.label }}
+    {{ form.confirm() }}
+
+    <button type="submit">Change</button>
+
+</form>

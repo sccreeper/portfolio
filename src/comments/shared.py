@@ -14,6 +14,9 @@ CREATE TABLE "comments" (
 )
 """
 
+PASSWORD_PATH: str = "/var/lib/portfolio/password.bin"
+DEFAULT_PASSWORD: bytes = b"password"
+
 COMMENTS_ENABLED: bool = (os.environ["COMMENTS"] == "true")
 print(f"Comments enabled: {COMMENTS_ENABLED}")
 

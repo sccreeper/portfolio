@@ -302,6 +302,10 @@ code {
     @apply border-white;
 }
 
+.comment pre {
+    @apply whitespace-pre-wrap;
+}
+
 /* HLJS */
 
 .hljs {

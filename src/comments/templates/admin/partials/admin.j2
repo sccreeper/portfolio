@@ -2,7 +2,7 @@
 
 <title hx-swap-oob="outerHTML:title">Main - Comments admin</title>
 
-<button style="float: right;" hx-post="/comments/logout" hx-confirm="Are you sure you want to logout?">Logout</button>
+{% include "admin/partials/components/menu.j2" %}
 
 <form hx-target="next tbody" hx-get="/comments/admin/filter">
 

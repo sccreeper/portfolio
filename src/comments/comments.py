@@ -5,13 +5,14 @@ from flask import render_template
 from datetime import datetime
 from uuid import uuid4
 import html
-from flask import request, redirect, session, make_response, abort, render_template_string, logging
+from flask import request, redirect, session, make_response, abort, render_template_string
 from flask_wtf import csrf
 from functools import wraps
+from argon2 import PasswordHasher
 
 from src import htmx
 from src.util import format_datetime
-from src.comments import comment_blueprint, Comment, COMMENTS_SCHEMA, DATABASE_PATH, SubmitCommentForm, COMMENTS_ENABLED, LoginForm, FilterCommentsForm
+from src.comments import comment_blueprint, Comment, COMMENTS_SCHEMA, DATABASE_PATH, SubmitCommentForm, COMMENTS_ENABLED, LoginForm, FilterCommentsForm, PASSWORD_PATH, DEFAULT_PASSWORD, ChangePasswordForm
 
 SESSION_TIME_LIMIT: int = 60*60
 
@@ -21,6 +22,17 @@ if not os.path.exists(DATABASE_PATH):
     con = sql.connect(DATABASE_PATH)
     con.execute(COMMENTS_SCHEMA)
     con.close()
+
+# Init password
+
+if not os.path.exists(PASSWORD_PATH):
+    ph = PasswordHasher()
+    hash = ph.hash(DEFAULT_PASSWORD)
+
+    with open(PASSWORD_PATH, "wb") as pw_file:
+        pw_file.write(bytes(hash, encoding="utf-8"))
+
+# Utility methods
 
 def login_required(f):
     @wraps(f)
@@ -85,6 +97,8 @@ def _get_all_comments() -> list[Comment]:
         c.date = format_datetime(c.date)
 
     return _comments
+
+# Route methods
 
 @comment_blueprint.route("/comments/post", methods=["POST"])
 def _post_comment():
@@ -181,18 +195,15 @@ def _comments_login():
             return abort(400)
 
         if not form.validate():
-            return render_template("admin/partials/login.j2", form=form, message="Form not valid")
+            return render_template("admin/partials/login.j2", form=form)
         
-        if form.password.data == os.environ["ADMIN_PASS"]:
-            resp = make_response("")
-            resp.headers["HX-Location"] = '{"path":"/comments/admin", "target":"#content-block"}'
+        resp = make_response("")
+        resp.headers["HX-Location"] = '{"path":"/comments/admin", "target":"#content-block"}'
 
-            session["authenticated"] = True
-            session["time"] = datetime.now().timestamp()
+        session["authenticated"] = True
+        session["time"] = datetime.now().timestamp()
 
-            return resp
-        else:
-            return render_template("admin/partials/login.j2", form=form, message="Password invalid")
+        return resp
 
 @comment_blueprint.route("/comments/logout", methods=["POST"])
 @login_required
@@ -281,6 +292,27 @@ def _filter_comments():
 
 """, 
         results=_comments, query=form.query.data)
+    
+@comment_blueprint.route("/comments/admin/changepassword", methods=["POST"])
+@login_required
+def _admin_change_password():
+    
+    form: ChangePasswordForm = ChangePasswordForm()
+
+    if not htmx:
+        return abort(400)
+
+    if not form.validate():
+        return render_template("admin/partials/settings.j2", form=form)
+    
+    with open(PASSWORD_PATH, "wb") as f:
+        ph = PasswordHasher()
+        hash = ph.hash(form.new.data)
+        f.write(bytes(hash, encoding="utf-8"))
+
+        form = ChangePasswordForm()
+
+        return render_template("admin/partials/settings.j2", form=form, status="Password changed successfully")
 
 @comment_blueprint.route("/comments/admin", methods=["GET"])
 @login_required
@@ -292,3 +324,13 @@ def _admin_comments():
         return render_template("admin/partials/admin.j2", comments=_get_all_comments(), form=form)
     else: 
         return render_template("admin/admin.j2", comments=_get_all_comments(), form=form)
+    
+@comment_blueprint.route("/comments/admin/settings", methods=["GET"])
+@login_required
+def _admin_settings():
+    form: ChangePasswordForm = ChangePasswordForm()
+
+    if htmx:
+        return render_template("admin/partials/settings.j2", form=form)
+    else:
+        return render_template("admin/settings.j2", form=form)
