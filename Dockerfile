@@ -1,9 +1,9 @@
-FROM alpine:latest
+FROM alpine:3.20
 
 RUN apk update
 RUN apk upgrade
 
-RUN apk add python3 py3-gunicorn poetry npm
+RUN apk add python3 py3-gunicorn poetry npm gcc libffi-dev python3-dev musl-dev
 
 WORKDIR /usr/portfolio
 
