@@ -2,7 +2,7 @@
 
 export DEBUG="false"
 
-if ! [[ -n "$CF_TURNSTLLE_SECRET" ]] || ! [[ -n "$CF_TURNSTILE_SITE_KEY" ]]; then
+if ! [[ -n "$CF_TURNSTLE_SECRET" ]] || ! [[ -n "$CF_TURNSTILE_SITE_KEY" ]]; then
 
 printf "Error: Cloudflare keys not set\n"
 exit 1
