@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from flask_limiter import Limiter
 from flask_htmx import HTMX
+from flask import Flask
 
 APPS_DATA_PATH: str = "/var/lib/portfolio/apps"
 
@@ -22,3 +23,4 @@ post_slugs: list[str] = []
 
 limiter: Limiter = None
 htmx: HTMX = HTMX()
+app: Flask = Flask(__name__)

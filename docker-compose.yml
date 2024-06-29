@@ -7,6 +7,8 @@ services:
       - SECRET
       - DEBUG
       - COMMENTS
+      - CF_TURNSTILE_SECRET
+      - CF_TURNSTILE_SITE_KEY
     build: .
     ports:
       - "8000:8000"

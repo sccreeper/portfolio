@@ -40,8 +40,12 @@ class PostsForm(FlaskForm):
 
     query = StringField("Search: ", default="", render_kw={"placeholder" : "Search"})
 
-app = Flask(__name__)
+from src import app
 app.config["SECRET_KEY"] = os.environ["SECRET"]
+
+@app.context_processor
+def inject_cf_keys():
+    return dict(cfsitekey=os.environ["CF_TURNSTILE_SITE_KEY"])
 
 if os.environ["DEBUG"] == "true":
     app.logger.setLevel(logging.DEBUG)

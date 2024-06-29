@@ -3,7 +3,7 @@ from markdown.extensions import Extension
 from markdown.treeprocessors import Treeprocessor
 from xml.etree import ElementTree as etree
 
-ALPHABET = "abcdefghijklmnopqrstuvwxyz"
+ALPHABET = "abcdefghijklmnopqrstuvwxyz123456790"
 HEADER_LEVELS = {
     "h1" : 1,
     "h2" : 2,

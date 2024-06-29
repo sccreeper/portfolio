@@ -3,11 +3,14 @@ from wtforms.fields import StringField, HiddenField, Field, PasswordField
 from wtforms.validators import Length, DataRequired, ValidationError, EqualTo
 from wtforms.widgets import TextArea
 from wtforms.form import Form
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
+
 from src import post_slugs
 from src.comments.profanity import profanity_validator
 from src.comments.shared import PASSWORD_PATH
-from argon2 import PasswordHasher
-from argon2.exceptions import VerifyMismatchError
+
+from src.turnstile import TurnstileField
 
 def _slug_validator(form: Form, field: Field):
     if not field.data in post_slugs:
@@ -48,6 +51,8 @@ class SubmitCommentForm(FlaskForm):
     )
 
     slug = HiddenField(None, validators=[_slug_validator])
+
+    turnstile = TurnstileField("Captcha", validators=[DataRequired("Please complete the captcha")])
 
 class LoginForm(FlaskForm):
 

@@ -128,3 +128,11 @@ The filter (query) and logout features are also built with HTMX as well.
 # Conclusion
 
 Hopefully now (if everything is working as it should) you should now be able to add comments beneath this post. If I add any updates in the future, e.g. turnstile and maybe replies, then I'll add it on at the end of this post.
+
+# Updates
+
+Other updates.
+
+## 2024-29-06
+
+Added Cloudflare turnstile support. Needed a custom field as it was just HTML, with the turnstile being [rendered explicitly](https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/#explicitly-render-the-turnstile-widget). Easier than I thought to be honest. I'll write a full post about it soon.

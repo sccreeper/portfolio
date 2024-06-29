@@ -5,17 +5,25 @@
       <title>{% block title %}{% endblock title %} - Oscar Peace</title>
       <script src="https://unpkg.com/htmx.org@2.0.0/dist/htmx.min.js"></script>
 
-      <!-- Highlight JS -->
+      {# Highlight JS #}
       <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/django.min.js"></script>
       <script src="https://unpkg.com/highlightjs-svelte/dist/svelte.min.js"></script>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
+      
+      {# Site styles #}
+      
       <link rel="stylesheet" href="/static/dist.css" media="screen"/>
       <link rel="stylesheet" href="/static/printer.css" media="print"/>
-
       <script src="/static/scripts/components/slideshow.js" type="module"></script>
 
-      <!-- MathJax -->
+      {# CF Turnstile #}
+
+      <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"></script>
+      <script>window.cfSiteKey = "{{ cfsitekey }}"</script>
+      <script src="/static/scripts/turnstile.js" defer></script>
+
+      {# MathJAX #}
 
       <script>
 
@@ -29,14 +37,8 @@
           }
         };
 
-        // Re-render MathJax when HTMX request is made.
-        document.addEventListener("htmx:afterSettle", function(){
-          MathJax.typeset()
-        })
-
       </script>
 
-      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
       <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/tex-mml-chtml.js"></script>
 
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
