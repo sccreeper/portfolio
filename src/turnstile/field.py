@@ -3,7 +3,7 @@ from wtforms import Field, Form
 from wtforms.widgets import html_params
 from typing import Callable
 
-from src.turnstile.turnstile import _validate
+from src.turnstile.turnstile import validate_turnstile
 
 # CF turnstile field. Created specifically for use on this website.
 
@@ -19,11 +19,11 @@ class TurnstileTargetWidget:
 class TurnstileField(Field):
     widget = TurnstileTargetWidget()
 
-    def __init__(self, label: str | None = None, turnstile_id: str = "turnstile", validators: list[Callable[[Form, Field], None]] = None, **kwargs) -> None:
-        super().__init__(label, validators, **kwargs)
-
-        if validators is None:
-            self.validators = []
-        self.validators.append(_validate)
+    def __init__(self, label: str | None = None, turnstile_id: str = "turnstile", **kwargs) -> None:
+        super().__init__(label, [], **kwargs)
+        
+        # having other validators messes up the CF logic.
+        # they're not needed anyway because this is a completely custom field.
+        self.validators = [validate_turnstile]
 
         self.widget = TurnstileTargetWidget(turnstile_id=turnstile_id)

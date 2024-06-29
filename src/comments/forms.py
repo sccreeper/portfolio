@@ -52,7 +52,7 @@ class SubmitCommentForm(FlaskForm):
 
     slug = HiddenField(None, validators=[_slug_validator])
 
-    turnstile = TurnstileField("Captcha", validators=[DataRequired("Please complete the captcha")])
+    turnstile = TurnstileField("Captcha")
 
 class LoginForm(FlaskForm):
 

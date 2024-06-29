@@ -9,7 +9,7 @@ CF_URL: str = "https://challenges.cloudflare.com/turnstile/v0/siteverify"
 
 CF_SECRET: str = os.environ["CF_TURNSTILE_SECRET"]
 
-def _validate(form: Form, ts_field: Field):
+def validate_turnstile(form: Form, ts_field: Field):
 
     resp = requests.post(
         CF_URL,
