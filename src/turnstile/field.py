@@ -1,5 +1,6 @@
 from markupsafe import Markup
 from wtforms import Field, Form
+from wtforms.form import BaseForm
 from wtforms.widgets import html_params
 from typing import Callable
 
@@ -21,9 +22,10 @@ class TurnstileField(Field):
 
     def __init__(self, label: str | None = None, turnstile_id: str = "turnstile", **kwargs) -> None:
         super().__init__(label, [], **kwargs)
-        
-        # having other validators messes up the CF logic.
-        # they're not needed anyway because this is a completely custom field.
-        self.validators = [validate_turnstile]
 
         self.widget = TurnstileTargetWidget(turnstile_id=turnstile_id)
+
+    def pre_validate(self, form: BaseForm) -> None:
+        super().pre_validate(form)
+
+        validate_turnstile(self.data)
