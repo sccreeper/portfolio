@@ -299,7 +299,7 @@ def _posts():
         # Worst list comprehension ever written.
         _posts_temp = [post for post in posts if form.query.data.lower() in post.title.lower() or form.query.data.lower() in [tag.lower() for tag in post.tags]]
     else:
-        _posts_temp = posts
+        _posts_temp = posts.copy()
 
     _posts_temp.sort(key=operator.attrgetter(form.prop.data), reverse=(form.dir.data == "desc"))
 
