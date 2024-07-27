@@ -1,5 +1,7 @@
 const turnstileTargetId = "turnstile"
 
+let turnstileCount = 0;
+
 function turnstileInit() {
   let turnstileTarget = document.getElementById(turnstileTargetId);
 
@@ -10,10 +12,14 @@ function turnstileInit() {
     console.log("TS target exists");
 
     turnstile.ready(function () {
-        turnstile.render(`#${turnstileTargetId}`, {
+        turnstileCount++;
+
+        if (turnstileCount <= 1) {
+          turnstile.render(`#${turnstileTargetId}`, {
             sitekey: window.cfSiteKey,
             "response-field-name": 'turnstile',
-        });
+        }); 
+        }
     });
 
   }
