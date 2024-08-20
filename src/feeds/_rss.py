@@ -1,4 +1,4 @@
-from src import Post
+from src import PostMeta
 from xml.etree import ElementTree as ET
 from src.feeds import FeedInterface, DEFAULT_TITLE, DEFAULT_DESCRIPTION, DEFAULT_URL
 import datetime
@@ -28,14 +28,14 @@ _GENERATOR_EL.text = "Oscar Peace's Blog Engine"
 
 ET.SubElement(DEFAULT_CHANNEL, "atom:link", attrib={"href" : "https://www.oscarcp.net/feeds/rss", "rel":"self", "type":"application/rss+xml"})
 
-def _post_to_element(post: Post) -> ET.Element:
+def _post_to_element(post: PostMeta) -> ET.Element:
 
     root = ET.Element("item")
     
     title = ET.SubElement(root, "title")
     title.text = post.title
     link = ET.SubElement(root, "link")
-    link.text = f"https://www.oscarcp.net/blog/{post.url}"
+    link.text = f"https://www.oscarcp.net/blog/{post.slug}"
     
     desc = ET.SubElement(root, "description")
     desc.text = post.summary
@@ -43,7 +43,7 @@ def _post_to_element(post: Post) -> ET.Element:
     pub_date = ET.SubElement(root, "pubDate")
     pub_date.text = format_datetime(datetime.datetime.fromtimestamp(post.timestamp))
     guid = ET.SubElement(root, "guid")
-    guid.text = f"https://www.oscarcp.net/blog/{post.url}"
+    guid.text = f"https://www.oscarcp.net/blog/{post.slug}"
 
     return root
 
@@ -52,7 +52,7 @@ class RSSFeed(FeedInterface):
     extension = ".xml"
     file = "rss.xml"
 
-    def generate_feed(_posts: list[Post]) -> bytes:
+    def generate_feed(_posts: list[PostMeta]) -> bytes:
         root_copy = DEFAULT_ROOT
         channel = root_copy.find("channel")
 

@@ -6,14 +6,14 @@ from wtforms.form import Form
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
 
-from src import post_slugs
+from src import posts
 from src.comments.profanity import profanity_validator
 from src.comments.shared import PASSWORD_PATH
 
 from src.turnstile import TurnstileField
 
 def _slug_validator(form: Form, field: Field):
-    if not field.data in post_slugs:
+    if not field.data in posts:
         raise ValidationError("Post URL not recognised")
     
 def _pw_validator(form: Form, field: Field):

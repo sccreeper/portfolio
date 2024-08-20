@@ -6,20 +6,23 @@ from flask import Flask
 APPS_DATA_PATH: str = "/var/lib/portfolio/apps"
 
 @dataclass(order=True)
-class Post():
+class PostMeta():
     title: str
     summary: str
     authour: str
     tags: list[str]
     published: str
-    url: str
+    slug: str
 
     timestamp: int
     length: int
 
-# TODO: Combine these - 18/07/24
-posts: list[Post] = []
-post_slugs: list[str] = []
+@dataclass
+class PostData:
+    meta: PostMeta
+    body: str
+
+posts: dict[str, PostData] = {}
 
 limiter: Limiter = None
 htmx: HTMX = HTMX()

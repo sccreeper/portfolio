@@ -1,7 +1,6 @@
-from flask import Flask, render_template, abort, send_file, request
+from flask import render_template, abort, send_file, request
 import logging
-from flask_htmx import HTMX
-import markdown
+import pickle
 import os
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
@@ -14,11 +13,7 @@ import mimetypes
 from flask_wtf import csrf
 from flask_limiter import Limiter
 
-from src import APPS_DATA_PATH, Post, post_slugs, posts, htmx
-from src.caption_extension import ImageCaptionExtension
-from src.slideshow_extension import SlideshowExtension
-from src.anchor_target_extension import AnchorTargetExtension
-from src.header_anchor_extension import HeaderAnchorExtension
+from src import APPS_DATA_PATH, PostData, posts, htmx
 from src.feeds import feed_registry
 from src.util import format_datetime, get_real_ip
 
@@ -76,23 +71,6 @@ if not os.path.exists(DATABASE_PATH):
     con.execute(DATABASE_SCHEMA)
     con.close()
 
-# Other methods
-
-def post_from_metadata(metadata: dict, url: str, length: int) -> Post:
-
-    t = metadata["published"][0].split("/")
-
-    return Post(
-            title=metadata["title"][0],
-            summary=metadata["summary"][0],
-            authour=metadata["authour"][0],
-            tags=metadata["tags"],
-            published=metadata["published"][0],
-            timestamp=datetime(year=int(t[2]),month=int(t[1]),day=int(t[0])).timestamp(),
-            url=url,
-            length=length,
-        )
-
 # Database update methods
 
 def increase_post_views(slug: str) -> None:
@@ -131,46 +109,20 @@ from src.comments import comment_blueprint, get_comments, SubmitCommentForm, COM
 app.register_blueprint(comment_blueprint)
 limiter.limit("60/minute" if os.environ["DEBUG"] == "true" else "30/minute")(comment_blueprint)
 
-# Load post metadata.
+# Load pickled posts
 
-print("Loading post metadata...")
-
-os.chdir("content")
-
-files = os.listdir(".")
-files.sort(key=os.path.getmtime)
-
-md = markdown.Markdown(extensions=["meta"])
-
-for f in files:
-    if os.path.splitext(f)[1] == ".md":
-
-        post = open(f"{f}", "r")
-        text = post.read()
-        md.convert(text)
-        
-        posts.append(
-            post_from_metadata(
-                md.Meta,
-                os.path.splitext(f)[0],
-                len(text.split(" ")),   
-            )
-        )
-
-        post.close()
-
-        post_slugs.append(os.path.splitext(f)[0])
-
-    else:
-        continue
-
+for pickle_jar in os.listdir("content/"):
+    if os.path.splitext(pickle_jar)[1] == ".pkl":
+        with open(f"content/{pickle_jar}", "rb") as f:
+            p: PostData = pickle.load(f)
+            posts[p.meta.slug] = p
 
 # Add any new posts to database
 
 con = sql.connect(DATABASE_PATH)
 cur = con.cursor()
 
-for url in post_slugs:
+for url in posts:
 
     cur.execute("SELECT * FROM posts WHERE slug = (?)", (url,))
     
@@ -184,23 +136,18 @@ con.close()
 
 # Sort posts
 
-posts = sorted(posts, key=operator.attrgetter("timestamp"), reverse=True)
-post_slugs.reverse()
+posts = {k: v for k, v in sorted(posts.items(), key=lambda item: item[1].meta.timestamp, reverse=True)}
 
-print(f"Found and processed {len(posts)} post(s)")
-
-del(md)
-
-os.chdir("..")
+print(f"Found and loaded {len(posts)} post(s)")
 
 @app.route("/", methods=["GET"])
 def index():
     post_data = []
 
     if len(posts) < 3:
-        post_data = posts
+        post_data = [v.meta for v in list(posts.values())]
     else:
-        post_data = posts[:3]
+        post_data = [v.meta for v in list(posts.values())[:3]]
 
     if htmx:
         return render_template("partials/home.j2", posts=post_data)
@@ -218,35 +165,15 @@ def projects():
         return render_template("projects.j2")
 
 @app.route("/blog/<slug>", methods=["GET"])
-def blog_post(slug=None):
-    if not slug in post_slugs:
+def blog_post(slug: str=None):
+    if not slug in posts:
         return abort(404)
     
     csrf.generate_csrf()
-    
-    # Parse post
-
-    md = markdown.Markdown(
-        extensions=[
-            "meta", 
-            "fenced_code", 
-            "attr_list", 
-            ImageCaptionExtension(), 
-            SlideshowExtension(), 
-            AnchorTargetExtension(), 
-            HeaderAnchorExtension()
-            ]
-        )
-    
-    f = open(f"content/{slug}.md", "r")
-    text = md.convert(f.read())
-    f.close()
 
     # Increase post views & get database data.
 
     increase_post_views(slug)
-
-    post_data = post_from_metadata(md.Meta, slug, 0)
 
     form: SubmitCommentForm = SubmitCommentForm()
     form.slug.data = slug
@@ -260,8 +187,8 @@ def blog_post(slug=None):
     if htmx:
         return render_template(
             "partials/blogpost.j2", 
-            post=post_from_metadata(md.Meta, slug, 0), 
-            content=text, 
+            post=posts[slug].meta, 
+            content=posts[slug].body, 
             views=get_post_views(slug),
             comments=comments,
             form=form,
@@ -272,11 +199,11 @@ def blog_post(slug=None):
     else:
         return render_template(
             "blogpost.j2", 
-            post=post_data, 
-            content=text, 
-            title=md.Meta["title"][0], 
+            post=posts[slug].meta, 
+            content=posts[slug].body, 
+            title=posts[slug].meta.title, 
             views=get_post_views(slug),
-            publish_date=datetime.fromtimestamp(post_data.timestamp).date().isoformat(),
+            publish_date=datetime.fromtimestamp(posts[slug].meta.timestamp).date().isoformat(),
             comments=comments,
             comments_enabled=COMMENTS_ENABLED,
             form=form
@@ -297,9 +224,9 @@ def _posts():
 
     if not form.query.data == "":
         # Worst list comprehension ever written.
-        _posts_temp = [post for post in posts if form.query.data.lower() in post.title.lower() or form.query.data.lower() in [tag.lower() for tag in post.tags]]
+        _posts_temp = [post for post in [v.meta for v in list(posts.values())] if form.query.data.lower() in post.title.lower() or form.query.data.lower() in [tag.lower() for tag in post.tags]]
     else:
-        _posts_temp = posts.copy()
+        _posts_temp = [v.meta for v in list(posts.values())]
 
     _posts_temp.sort(key=operator.attrgetter(form.prop.data), reverse=(form.dir.data == "desc"))
 
@@ -315,17 +242,11 @@ def _posts():
 
 @app.route("/og/<slug>")
 def opengraph(slug=None):
-    if not slug in post_slugs:
+    if not slug in posts:
         return abort(404)
     else:
-        # Open post MD
 
-        md = markdown.Markdown(extensions=["meta"])
-        f = open(f"content/{slug}.md", "r")
-        md.convert(f.read())
-        f.close()
-
-        p = post_from_metadata(md.Meta, "", 0)
+        p = posts[slug].meta
 
         # Create and draw on image
 
@@ -367,7 +288,7 @@ def _feeds(feed_type: str = None):
         return abort(404)
 
     buffer = BytesIO()
-    buffer.write(feed_registry[feed_type].generate_feed(posts[:5]))
+    buffer.write(feed_registry[feed_type].generate_feed([v.meta for v in list(posts.values())][:5]))
     buffer.seek(0)
 
     return send_file(
