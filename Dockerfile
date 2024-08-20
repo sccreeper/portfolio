@@ -4,7 +4,7 @@ RUN apk update
 RUN apk upgrade
 
 RUN apk add python3 py3-gunicorn poetry npm gcc libffi-dev python3-dev musl-dev
-RUN apk add imagemagick libavif libpng libjpeg
+RUN apk add imagemagick libavif libpng libjpeg libheif
 
 WORKDIR /usr/portfolio
 

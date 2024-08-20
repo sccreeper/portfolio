@@ -12,6 +12,13 @@ import xml.etree.ElementTree as etree
 image_processing_exclusions = [".gif"]
 processed_images = []
 
+# JPEGs for actual pictures, PNGs for graphs/screenshots etc.
+
+QUALITY_VALUES = {
+    ".jpg" : "20%",
+    ".png" : "50%"
+}
+
 def process_image(img_src: str) -> str:
 
     img_src = img_src.replace("/content/", "")
@@ -37,7 +44,7 @@ def process_image(img_src: str) -> str:
     else:
         print(f"Processing '{img_src}'")
 
-        subprocess.call(["magick", "convert", img_src, "-quality", "90%", filepath + ".avif"])
+        subprocess.call(["magick", "convert", img_src, "-quality", QUALITY_VALUES[ext], filepath + ".avif"])
         os.remove(img_src)
         
         processed_images.append(img_src)

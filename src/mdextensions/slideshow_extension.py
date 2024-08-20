@@ -1,9 +1,12 @@
+import urllib.parse
 import markdown
 from markdown.extensions import Extension
 from markdown.blockprocessors import BlockProcessor
 import xml.etree.ElementTree as etree
 import re
 from dataclasses import dataclass
+from src.mdextensions.image_processing_extension import process_image
+import urllib
 
 @dataclass
 class Slide:
@@ -30,7 +33,10 @@ class SlideshowBlockProcessor(BlockProcessor):
 
                 data = b.split(" ", 1)
 
-                slides.append(Slide(data[0], data[1]))
+                src = "/content/" + process_image(data[0])
+                src = urllib.parse.quote(src, safe="/")
+
+                slides.append(Slide(src, data[1]))
 
         return slides
 
