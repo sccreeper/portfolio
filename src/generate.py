@@ -1,5 +1,4 @@
 import os
-import json
 import markdown
 from src.mdextensions import *
 from src import PostData, PostMeta

@@ -14,6 +14,7 @@ RUN npm install
 RUN poetry install
 RUN sh ./build_css.sh
 
+ENV PYTHONUNBUFFERED=1
 RUN poetry run python3 -m src.generate
 
 CMD ["sh", "./run.sh"]

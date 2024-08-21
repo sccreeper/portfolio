@@ -1,4 +1,4 @@
-from flask import render_template, abort, send_file, request
+from flask import render_template, abort, send_from_directory, send_file, request
 import logging
 import pickle
 import os
@@ -12,6 +12,7 @@ from wtforms.fields import SelectField, StringField
 import mimetypes
 from flask_wtf import csrf
 from flask_limiter import Limiter
+from flask_compress import Compress
 
 from src import APPS_DATA_PATH, PostData, posts, htmx
 from src.feeds import feed_registry
@@ -55,6 +56,8 @@ limiter = Limiter(
 )
 
 htmx.init_app(app)
+compress = Compress()
+compress.init_app(app)
 
 con: sql.Connection = None
 cur: sql.Cursor = None
@@ -211,7 +214,7 @@ def blog_post(slug: str=None):
 
 @app.route("/content/<path:path>", methods=["GET"])
 def blog_content(path=None):
-    return send_file(f"../content/{path}")
+    return send_from_directory("../content/", path)
 
 @app.route("/posts", methods=["GET"])
 def _posts():
