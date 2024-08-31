@@ -34,7 +34,8 @@ def main():
     md = markdown.Markdown(
             extensions=[
                 "meta", 
-                "fenced_code",  
+                "fenced_code",
+                "tables",
                 SlideshowExtension(), 
                 AnchorTargetExtension(), 
                 HeaderAnchorExtension(),

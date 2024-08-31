@@ -51,6 +51,11 @@ li::before {
     content: " - "
 }
 
+li {
+    @apply mb-2;
+    @apply mt-2;
+}
+
 /* Input styling */
 
 input[type=text],textarea {
@@ -284,6 +289,20 @@ code {
     @apply border-l;
     @apply border-l-black;
     @apply dark:border-l-white;
+}
+
+#blog-content table, th, td {
+    @apply border;
+    @apply border-black;
+    @apply dark:border-white;
+}
+
+#blog-content table {
+    @apply border-collapse;
+}
+
+#blog-content td, th {
+    @apply p-1;
 }
 
 .header { 
