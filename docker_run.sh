@@ -23,5 +23,12 @@ exit 1
 
 fi
 
+if ![[-n "$RATE_LIMIT"]]; then
+
+printf "Error: No rate limit set\n"
+exit 1
+
+fi
+
 docker compose build
 docker compose up -d

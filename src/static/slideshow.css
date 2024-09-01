@@ -8,6 +8,10 @@ img {
     @apply border-black;
     @apply dark:border-white;
     @apply cursor-pointer;
+    
+    @apply max-h-[300px];
+    @apply sm:max-h-[500px];
+    @apply block ml-auto mr-auto;
 }
 
 figcaption {

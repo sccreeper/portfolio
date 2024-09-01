@@ -12,6 +12,7 @@ services:
       - COMMENTS
       - CF_TURNSTILE_SECRET
       - CF_TURNSTILE_SITE_KEY
+      - RATE_LIMIT
     build: .
     ports:
       - "8000:8000"

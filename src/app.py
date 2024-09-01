@@ -51,7 +51,7 @@ else:
 limiter = Limiter(
     get_real_ip,
     app=app,
-    default_limits=["5 per second"],
+    default_limits=[f"{os.environ["RATE_LIMIT"]} per second"],
     storage_uri="memory://"
 )
 
