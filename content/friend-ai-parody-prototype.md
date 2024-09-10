@@ -4,7 +4,7 @@ Authour: Oscar Peace
 Tags: AI
       Arduino
       Go
-Published: 31/8/2024
+Published: 10/9/2024
 
 This post is about my recreation of the [friend.com](https://friend.com) AI necklace. It is divided into two main parts and a conclusion: the how I made it part, and the why I made it part and finally the conclusion If you only want to read one part, feel free to skip ahead.
 
