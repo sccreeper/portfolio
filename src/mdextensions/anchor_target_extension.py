@@ -11,7 +11,7 @@ class AnchorProcessor(Treeprocessor):
 
         for i in range(len(root)):
             for anchor in root[i].iter("a"):
-                if anchor.attrib["href"].startswith((PROTOCOL_SEC, PROTOCOL)):
+                if anchor.attrib["href"].startswith((PROTOCOL_SEC, PROTOCOL, "/content/assets/")):
                     anchor.attrib["target"] = "_blank"
                 else:
                     anchor.attrib = {

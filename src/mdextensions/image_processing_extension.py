@@ -15,8 +15,8 @@ processed_images = []
 # JPEGs for actual pictures, PNGs for graphs/screenshots etc.
 
 QUALITY_VALUES = {
-    ".jpg" : "20%",
-    ".png" : "50%"
+    ".jpg" : "30%",
+    ".png" : "75%"
 }
 
 def process_image(img_src: str) -> str:
