@@ -1,23 +1,32 @@
 <title hx-swap-oob="outerHTML:title">{{post.title}} - Oscar Peace</title>
 
-<h1><b>{{post.title}}</b></h1>
-<h2>{{post.summary}}</h2>
-<p><b>Tags:</b> {% for tag in post.tags %}
-{{tag}}
-{% endfor %}</p>
-<p>{{views}} views</p>
-<h2>{{post.authour}} - {{post.published}}</h2>
-<br>
-<div id="blog-content">
-{{content}}
-</div>
+<hgroup>
 
+  <h1><b>{{post.title}}</b></h1>
+  <h2>{{post.summary}}</h2>
+  <p><b>Tags:</b> {% for tag in post.tags %}
+  {{tag}}
+  {% endfor %}</p>
+  <p>{{views}} views</p>
+  <h2>{{post.authour}} - {{post.published}}</h2>
+
+</hgroup>
+
+<br>
+
+<article id="blog-content">
+{{content}}
+</article>
+
+<section>
 
 {% with comments=comments, errors=[], enabled=comments_enabled %}
 
 {% include "./comments/comments.j2" %}
 
 {% endwith %}
+
+</section>
 
 <script>
   hljs.highlightAll();

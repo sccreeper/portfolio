@@ -1,10 +1,10 @@
 {% macro comment(id, name, date, comment) %}
 
-<div id="c-{{ id }}" class="comment">
-<b>{{ name }}</b>
-<br>
-<i class="text-xs"> {{ date }}</i>
-<pre>{{ comment }}</pre>
-</div>
+<article id="c-{{ id }}" class="comment">
+    <b>{{ name }}</b>
+    <br>
+    <i class="text-xs"> {{ date }} </i>
+    <pre>{{ comment }}</pre>
+</article>
 
 {%endmacro%}

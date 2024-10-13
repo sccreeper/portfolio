@@ -2,42 +2,50 @@
 
 <title hx-swap-oob="outerHTML:title">Posts - Oscar Peace</title>
 
-<b>{{count}} posts</b>
+<section>
 
-<div class="float-right">
+    <b>{{count}} posts</b>
 
-    <b>Feeds: </b>
+    <div class="float-right">
 
-    <a class="no-underline" href="/feeds/rss" title="RSS" download><i class="bi bi-rss text-orange-600 dark:text-orange-400"></i> RSS</a>
-    <a class="no-underline" href="/feeds/atom" title="Atom" download><i class="bi bi-circle-fill text-sky-600 dark:text-sky-400"></i> Atom</a>
-    <a class="no-underline" href="/feeds/json" title="JSON Feed" download><i class="bi bi-braces text-lime-800 dark:text-lime-400"></i> JSON</a>
+        <b>Feeds: </b>
 
-</div>
+        <a class="no-underline" href="/feeds/rss" title="RSS" download><i class="bi bi-rss text-orange-600 dark:text-orange-400"></i> RSS</a>
+        <a class="no-underline" href="/feeds/atom" title="Atom" download><i class="bi bi-circle-fill text-sky-600 dark:text-sky-400"></i> Atom</a>
+        <a class="no-underline" href="/feeds/json" title="JSON Feed" download><i class="bi bi-braces text-lime-800 dark:text-lime-400"></i> JSON</a>
 
-<br>
+    </div>
 
-<form hx-get="/posts" hx-target="#content-block" hx-push-url="true">
+    <br>
 
-    {{ form.prop.label }}
-    {{ form.prop() }}
+    <form hx-get="/posts" hx-target="#content-block" hx-push-url="true">
 
-    {{ form.dir.label }}
-    {{ form.dir() }}
+        {{ form.prop.label }}
+        {{ form.prop() }}
 
-    {{ form.query.label }}
-    {{ form.query() }}
+        {{ form.dir.label }}
+        {{ form.dir() }}
 
-    <button type="submit">Apply</button>
+        {{ form.query.label }}
+        {{ form.query() }}
 
-</form>
+        <button type="submit">Apply</button>
 
-{% for post in posts %}
+    </form>
 
-{{postlink.post_link(
-    post.title,
-    post.published,
-    post.summary,
-    post.slug
-)}}
+</section>
 
-{% endfor %}
+<section>
+
+    {% for post in posts %}
+
+    {{postlink.post_link(
+        post.title,
+        post.published,
+        post.summary,
+        post.slug
+    )}}
+
+    {% endfor %}
+
+</section>

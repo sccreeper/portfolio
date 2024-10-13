@@ -98,24 +98,24 @@ textarea:focus {
 
 /* Navbar */
 
-#navbar>h1 {
+header>h1 {
     font-size: 36px;
     text-decoration: none;
     font-weight: 400;
 }
 
-#navbar-links>a {
+nav>a {
     text-decoration: underline;
     font-size: 20px;
     cursor: pointer;
 }
 
-#navbar-links {
+nav {
     margin-bottom: 8px;
 }
 
 
-#navbar {
+header {
     padding: 8px;
 }
 
@@ -130,7 +130,7 @@ textarea:focus {
     @apply mb-3;
 }
 
-#footer {
+footer {
     width: 100%;
     text-align: center;
 }
