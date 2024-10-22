@@ -1,4 +1,4 @@
-from flask import render_template, abort, send_from_directory, send_file, request
+from flask import render_template, abort, send_from_directory, send_file, request, url_for
 import logging
 import pickle
 import os
@@ -42,6 +42,12 @@ app.config["SECRET_KEY"] = os.environ["SECRET"]
 @app.context_processor
 def inject_cf_keys():
     return dict(cfsitekey=os.environ["CF_TURNSTILE_SITE_KEY"])
+
+@app.context_processor
+def inject_canonical_url():
+    can_url = url_for(request.endpoint, **request.view_args) if request.endpoint else ''
+    return dict(can_url=can_url)
+
 
 if os.environ["DEBUG"] == "true":
     app.logger.setLevel(logging.DEBUG)
