@@ -4,7 +4,7 @@ Authour: Oscar Peace
 Tags: Minecraft
       Logic
       Hardware
-Published: 22/10/2024
+Published: 22/12/2024
 
 ***Note:** This post assumes that you have familiarity with positive binary decimal conversion and logic gates.*
 
