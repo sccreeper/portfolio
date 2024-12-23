@@ -1,3 +1,5 @@
+{%import "components/postlink.j2" as postlink%}
+
 <title hx-swap-oob="outerHTML:title">{{post.title}} - Oscar Peace</title>
 
 <hgroup>
@@ -27,6 +29,26 @@
 {% endwith %}
 
 </section>
+
+{% if sim_posts|length > 0 %}
+
+<section>
+<h1><b>Similar posts</b></h1>
+
+{% for p in sim_posts %}
+
+{{postlink.post_link(
+    p[0].title,
+    p[0].published,
+    p[0].summary,
+    p[0].slug
+)}}
+
+{% endfor %}
+
+</section>
+
+{% endif %}
 
 <script>
   hljs.highlightAll();

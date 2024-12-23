@@ -14,7 +14,7 @@ from flask_wtf import csrf
 from flask_limiter import Limiter
 from flask_compress import Compress
 
-from src import APPS_DATA_PATH, PostData, posts, htmx, DateContainer
+from src import APPS_DATA_PATH, PostData, posts, htmx, DateContainer, PostMeta
 from src.feeds import feed_registry
 from src.util import format_datetime, get_real_ip
 
@@ -192,11 +192,30 @@ def blog_post(slug: str=None):
 
     for c in comments:
         c.date = DateContainer.create_date(c.date)
+
+    sim_posts: list[tuple[PostMeta, int]] = []
+
+    for p in posts:
+        if p == slug:
+            continue
+        else:
+            common = set(posts[p].meta.tags) & set(posts[slug].meta.tags)
+
+            if len(common) == 0:
+                continue
+            else:
+                sim_posts.append((posts[p].meta, len(common)))
+
+    # Sort by number of common tags, then truncate
+    sim_posts = sorted(sim_posts, key=lambda x: x[1])
+    sim_posts.reverse()
+    sim_posts = sim_posts[0:3]
     
     if htmx:
         return render_template(
             "partials/blogpost.j2", 
-            post=posts[slug].meta, 
+            post=posts[slug].meta,
+            sim_posts=sim_posts,
             content=posts[slug].body, 
             views=get_post_views(slug),
             comments=comments,
@@ -209,6 +228,7 @@ def blog_post(slug: str=None):
         return render_template(
             "blogpost.j2", 
             post=posts[slug].meta, 
+            sim_posts=sim_posts,
             content=posts[slug].body, 
             title=posts[slug].meta.title, 
             views=get_post_views(slug),
