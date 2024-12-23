@@ -14,7 +14,7 @@ from flask_wtf import csrf
 from flask_limiter import Limiter
 from flask_compress import Compress
 
-from src import APPS_DATA_PATH, PostData, posts, htmx
+from src import APPS_DATA_PATH, PostData, posts, htmx, DateContainer
 from src.feeds import feed_registry
 from src.util import format_datetime, get_real_ip
 
@@ -145,7 +145,7 @@ con.close()
 
 # Sort posts
 
-posts = {k: v for k, v in sorted(posts.items(), key=lambda item: item[1].meta.timestamp, reverse=True)}
+posts = {k: v for k, v in sorted(posts.items(), key=lambda item: item[1].meta.published.timestamp, reverse=True)}
 
 print(f"Found and loaded {len(posts)} post(s)")
 
@@ -191,7 +191,7 @@ def blog_post(slug: str=None):
     comments = sorted(comments, key=operator.attrgetter("date"), reverse=True)
 
     for c in comments:
-        c.date = format_datetime(c.date)
+        c.date = DateContainer.create_date(c.date)
     
     if htmx:
         return render_template(
@@ -212,7 +212,6 @@ def blog_post(slug: str=None):
             content=posts[slug].body, 
             title=posts[slug].meta.title, 
             views=get_post_views(slug),
-            publish_date=datetime.fromtimestamp(posts[slug].meta.timestamp).date().isoformat(),
             comments=comments,
             comments_enabled=COMMENTS_ENABLED,
             form=form
@@ -237,7 +236,12 @@ def _posts():
     else:
         _posts_temp = [v.meta for v in list(posts.values())]
 
-    _posts_temp.sort(key=operator.attrgetter(form.prop.data), reverse=(form.dir.data == "desc"))
+    _posts_temp.sort(
+        key=operator.attrgetter(
+            form.prop.data if form.prop.data != "timestamp" else "published.timestamp"
+         ), 
+        reverse=(form.dir.data == "desc")
+    )
 
     if htmx:
         return render_template("partials/posts.j2", posts=_posts_temp, count=len(_posts_temp), form=form)

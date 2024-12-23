@@ -3,7 +3,7 @@
 <article id="c-{{ id }}" class="comment">
     <b>{{ name }}</b>
     <br>
-    <i class="text-xs"> {{ date }} </i>
+    <p class="text-xs"> <time datetime="{{date.date_8601}}">{{date.date_full}} <b>@</b> {{date.time}}</time></p>
     <pre>{{ comment }}</pre>
 </article>
 

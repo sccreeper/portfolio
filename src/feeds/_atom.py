@@ -28,7 +28,7 @@ def _post_to_element(post: PostMeta) -> ET.Element:
     _id = ET.SubElement(root, "id")
     _id.text = f"https://www.oscarcp.net/blog/{post.slug}"
     updated = ET.SubElement(root, "updated")
-    updated.text = datetime.fromtimestamp(post.timestamp).isoformat()
+    updated.text = datetime.fromtimestamp(post.published.timestamp).isoformat()
     summary = ET.SubElement(root, "summary")
     summary.text = post.summary
 

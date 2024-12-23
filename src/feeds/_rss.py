@@ -41,7 +41,7 @@ def _post_to_element(post: PostMeta) -> ET.Element:
     desc.text = post.summary
 
     pub_date = ET.SubElement(root, "pubDate")
-    pub_date.text = format_datetime(datetime.datetime.fromtimestamp(post.timestamp))
+    pub_date.text = format_datetime(datetime.datetime.fromtimestamp(post.published.timestamp))
     guid = ET.SubElement(root, "guid")
     guid.text = f"https://www.oscarcp.net/blog/{post.slug}"
 

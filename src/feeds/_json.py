@@ -29,7 +29,7 @@ class JSONFeed(FeedInterface):
                     "summary": post.summary,
                     "title": post.title,
                     "content_text": "",
-                    "date_published": datetime.datetime.fromtimestamp(post.timestamp).isoformat()
+                    "date_published": datetime.datetime.fromtimestamp(post.published.timestamp).isoformat()
                 }
             )
 

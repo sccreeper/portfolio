@@ -1,7 +1,7 @@
 import os
 import markdown
 from src.mdextensions import *
-from src import PostData, PostMeta
+from src import PostData, PostMeta, DateContainer
 from datetime import datetime
 import pickle
 
@@ -14,8 +14,9 @@ def post_from_metadata(metadata: dict, url: str, length: int) -> PostMeta:
             summary=metadata["summary"][0],
             authour=metadata["authour"][0],
             tags=metadata["tags"],
-            published=metadata["published"][0],
-            timestamp=datetime(year=int(t[2]),month=int(t[1]),day=int(t[0])).timestamp(),
+            published=DateContainer.create_date(
+                datetime(year=int(t[2]),month=int(t[1]),day=int(t[0])).timestamp()
+            ),
             slug=url,
             length=length,
         )

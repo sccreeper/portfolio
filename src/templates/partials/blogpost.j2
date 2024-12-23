@@ -8,7 +8,7 @@
   {{tag}}
   {% endfor %}</p>
   <p>{{views}} views</p>
-  <h2>{{post.authour}} - {{post.published}}</h2>
+  <h2>{{post.authour}} - <time datetime="{{post.published.date_8601}}">{{post.published.date_full}}</time></h2>
 
 </hgroup>
 
