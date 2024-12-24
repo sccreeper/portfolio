@@ -6,7 +6,7 @@ from wtforms.form import Form
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
 
-from src import posts
+from src.shared import posts
 from src.comments.profanity import profanity_validator
 from src.comments.shared import PASSWORD_PATH
 

@@ -1,4 +1,4 @@
-from src import PostMeta
+from src._dataclasses import PostMeta
 from src.feeds import DEFAULT_DESCRIPTION, DEFAULT_TITLE, DEFAULT_URL, FeedInterface
 from datetime import datetime
 import html

@@ -1,9 +1,9 @@
 import requests
 import os
 import json
-from wtforms import ValidationError, Form, Field
+from wtforms import ValidationError
 
-from src import app
+from src.shared import app
 
 CF_URL: str = "https://challenges.cloudflare.com/turnstile/v0/siteverify"
 

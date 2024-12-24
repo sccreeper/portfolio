@@ -1,4 +1,4 @@
-from src import PostMeta
+from src._dataclasses import PostMeta
 from xml.etree import ElementTree as ET
 from src.feeds import FeedInterface, DEFAULT_TITLE, DEFAULT_DESCRIPTION, DEFAULT_URL
 import datetime

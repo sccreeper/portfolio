@@ -10,7 +10,7 @@ from flask_wtf import csrf
 from functools import wraps
 from argon2 import PasswordHasher
 
-from src import htmx
+from src.shared import htmx
 from src.util import format_datetime
 from src.comments import comment_blueprint, Comment, COMMENTS_SCHEMA, DATABASE_PATH, SubmitCommentForm, COMMENTS_ENABLED, LoginForm, FilterCommentsForm, PASSWORD_PATH, DEFAULT_PASSWORD, ChangePasswordForm
 

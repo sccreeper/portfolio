@@ -1,7 +1,7 @@
 import os
 import markdown
 from src.mdextensions import *
-from src import PostData, PostMeta, DateContainer
+from src._dataclasses import PostData, PostMeta, DateContainer
 from datetime import datetime
 import pickle
 

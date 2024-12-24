@@ -1,5 +1,5 @@
 from flask import Blueprint, send_file
-from src import APPS_DATA_PATH
+from src.constants import APPS_DATA_PATH
 import os
 import random
 import json
