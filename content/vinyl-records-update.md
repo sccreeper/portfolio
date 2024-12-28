@@ -15,31 +15,31 @@ I can mostly get around this by buying from [Discogs](https://www.discogs.com/),
 
 ## Out of the Blue
 
-![](/content/assets/records%20update%202/out%20of%20the%20blue%20gatefold.jpg "Out of the blue gatefold inner fold. Just look at the attention to detail on it.")
+![](/content/assets/records%20update%202/out%20of%20the%20blue%20gatefold.fd.jpg "Out of the blue gatefold inner fold. Just look at the attention to detail on it.")
 
 In my honest opinion this is the best Electric Light Orchestra album. It has *Mr. Blue Sky* on it, that's it, there's nothing else to say. The futurist style album art is possibly one of the best of all time, credit to [Kosh and Shusei Nagaoka](https://en.wikipedia.org/wiki/Out_of_the_Blue_(Electric_Light_Orchestra_album)#Cover_art). Favourite track is *Turn to Stone*.
 
 ## Dark Side Of The Moon
 
-![](/content/assets/records%20update%202/dark%20side%20of%20the%20moon.jpg "Dark Side of The Moon front cover. Honestly a bit bland but I can understand why it's so iconic.")
+![](/content/assets/records%20update%202/dark%20side%20of%20the%20moon.fd.jpg "Dark Side of The Moon front cover. Honestly a bit bland but I can understand why it's so iconic.")
 
 Classic Pink Floyd album, sounds amazing on vinyl. My copy is the 50th anniversary edition, which was a remastering of the original, I don't think my ears are attuned enough to hear any difference anyway. For me it's probably not the best Pink Floyd album however it is the one everyone has so that's probably what got me to get it looking back on it. Favourite track is *Money*.
 
 ## In The Court Of The Crimson King
 
-![](/content/assets/records%20update%202/in%20the%20court%20of%20the%20crimson%20king.jpg "Front cover. Kind of the most good looking but also creepiest at the same time cover")
+![](/content/assets/records%20update%202/in%20the%20court%20of%20the%20crimson%20king.fd.jpg "Front cover. Kind of the most good looking but also creepiest at the same time cover")
 
 I first heard the title track of this album when watching Alfonso Cuarón's 2008 film, [Children of Men](https://en.wikipedia.org/wiki/Children_of_Men) (incredible film, the book it was based off is just as good if not better). TLDR; most things related to this album are good. My favourite track is the title track.
 
 ## Brothers in Arms
 
-![](/content/assets/records%20update%202/brothers%20in%20arms%20disc.jpg "Centre of Brothers in Arms disc. Honestly I like the art on the sticker more than the album cover.")
+![](/content/assets/records%20update%202/brothers%20in%20arms%20disc.fd.jpg "Centre of Brothers in Arms disc. Honestly I like the art on the sticker more than the album cover.")
 
 This isn't the only Dire Straits record in my collection. Before getting this record and my other Dire Straits albums, I listened to no Dire Straits at all. This was until it was recommended to me by a friend. Favourite track is *Money for Nothing*, the intro riff on that track cannot be beaten. Unfortunately my copy skips on Side B, but it only does this once. This is caused by a surface scratch as well so the damage is basically permanent.
 
 ## By the Way
 
-![](/content/assets/records%20update%202/by%20the%20way%20cover.jpg "Cover of By the Way. I actually like the painted style of this cover a lot, though to be fair most RHCP album covers are quite nice.")
+![](/content/assets/records%20update%202/by%20the%20way%20cover.fd.jpg "Cover of By the Way. I actually like the painted style of this cover a lot, though to be fair most RHCP album covers are quite nice.")
 
 The second Red Hot Chili Peppers (RHCP) album I got. In my opinion this isn't their best album but it certainly isn't their worst either, their best would have to be *Blood Sugar Sex Magik* or *The Getaway* (I'm a huge *Dark Necessities* enjoyer). It's a 180g pressing however like my copy of *Californication* annoyingly it isn't a gatefold. Also RHCP albums are usually on the more expensive side so getting new ones always hurts my bank account balance. Favourite track is *Can't Stop*.
 

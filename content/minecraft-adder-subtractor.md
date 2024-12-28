@@ -18,7 +18,7 @@ In order to add 1 bit, you need something called a half adder. This doesn't exac
 
 Of course building one in Minecraft is slightly different as there are no discrete blocks for logic gates. Instead you must construct the logic gates block by block which means that some gates are much larger than others. Especially the XOR gate which is *the main gate* for adders/subtractors. A full list of the logic gate schematics can be found on the wiki [here](https://minecraft.wiki/w/Redstone_circuits/Logic).
 
-![](/content/assets/minecraft%20adder%20subtractor/screenshots/half%20adder%20ingame.png "The unconnected redstone lines are the inputs and outputs.")
+![](/content/assets/minecraft%20adder%20subtractor/screenshots/half%20adder%20ingame.fd.png "The unconnected redstone lines are the inputs and outputs.")
 
 # Full adder
 
@@ -28,7 +28,7 @@ The full adder consists of two half-adders connected together with an additional
 
 This is again the same in Minecraft, and once again is larger:
 
-![](/content/assets/minecraft%20adder%20subtractor/screenshots/full%20adder%20ingame.png)
+![](/content/assets/minecraft%20adder%20subtractor/screenshots/full%20adder%20ingame.fd.png)
 
 If you want to create a multi-bit adder then you connect the carry line from the first adder into the second adder, then second to third, third to forth, and so on.
 
@@ -40,7 +40,7 @@ A 1 bit adder on it's own is a bit useless, because the biggest number is $ 2^1 
 
 Doing this in Minecraft is practically the same, however it just takes longer:
 
-![](/content/assets/minecraft%20adder%20subtractor/screenshots/multibit%20adder%20ingame.png)
+![](/content/assets/minecraft%20adder%20subtractor/screenshots/multibit%20adder%20ingame.fd.png)
 
 In the above screenshot the carry line for each full adder is the sunken bit of redstone, in-between the previous and next adder. Each full adder is highlighted by a red box.
 
@@ -71,7 +71,7 @@ This now unfortunately increases the size of our adder-subtractor in Minecraft a
 
 Now we have connected an XOR gate to all our B inputs, the adder subtractor is now complete.
 
-![](/content/assets/minecraft%20adder%20subtractor/screenshots/full%20adder%20subtractor%20ingame.png "The control line is on the bottom of this screenshot")
+![](/content/assets/minecraft%20adder%20subtractor/screenshots/full%20adder%20subtractor%20ingame.fd.png "The control line is on the bottom of this screenshot")
 
 # The final thing
 
@@ -79,11 +79,11 @@ Only being able to add 3 bits together isn't that great, I think most people are
 
 ////
 
-/content/assets/minecraft%20adder%20subtractor/screenshots/finished%20front%20side.png The interface for the adder subtractor.
+/content/assets/minecraft%20adder%20subtractor/screenshots/finished%20front%20side.fd.png The interface for the adder subtractor.
 
-/content/assets/minecraft%20adder%20subtractor/screenshots/finished%20top.png The buses connecting the interface to the actual logic.
+/content/assets/minecraft%20adder%20subtractor/screenshots/finished%20top.fd.png The buses connecting the interface to the actual logic.
 
-/content/assets/minecraft%20adder%20subtractor/screenshots/finished%20left%20side.png One of the sides, showing the two layers of adders. The bottom layer being 0-4, top 5-7.
+/content/assets/minecraft%20adder%20subtractor/screenshots/finished%20left%20side.fd.png One of the sides, showing the two layers of adders. The bottom layer being 0-4, top 5-7.
 
 ////
 

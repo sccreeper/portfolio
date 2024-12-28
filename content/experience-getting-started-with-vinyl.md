@@ -28,11 +28,11 @@ One thing I'd wish I'd known before doing this is how relatively expensive half-
 
 After reading about the grading, I got some records to start my collection, 2 new, and 2 second hand.
 
-![](/content/assets/records.jpg "From L-R: Californication, Whatever Peoiple Say I Am That's What I'm Not, A New World Record, The Age of Consent")
+![](/content/assets/records.fd.jpg "From L-R: Californication, Whatever Peoiple Say I Am That's What I'm Not, A New World Record, The Age of Consent")
 
 The Age Of Consent was in reasonably good condition, only problem with it was dust, which to be honest was the same across all the records after I played them a few times. The crackling only happened a few times in each record and was unnoticeable when audio was actually playing. 
 
-![](/content/assets/age%20of%20consent.jpg "The Age of Consent")
+![](/content/assets/age%20of%20consent.fd.jpg "The Age of Consent")
 
 # Other things
 
