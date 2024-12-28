@@ -82,4 +82,6 @@ def migrate():
 
         session.commit()
 
+    engine.dispose()
+
     
