@@ -2,14 +2,17 @@ from flask import request, url_for
 import logging
 import pickle
 import os
-import sqlite3 as sql
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
 from flask_limiter import Limiter
 from flask_compress import Compress
 
-from src.constants import APPS_DATA_PATH, DATABASE_PATH, DATABASE_SCHEMA
+from src.constants import APPS_DATA_PATH, DATA_VERSION_PATH, DATABASE_PATH
 from src._dataclasses import PostData
 from src.shared import posts, htmx
 from src.util import get_real_ip
+from src.db.models import PostModel
+from src.db import db
 
 from src.shared import app
 app.config["SECRET_KEY"] = os.environ["SECRET"]
@@ -40,20 +43,30 @@ htmx.init_app(app)
 compress = Compress()
 compress.init_app(app)
 
-con: sql.Connection = None
-cur: sql.Cursor = None
+if os.path.exists(DATA_VERSION_PATH):
+    old_ver_number: int
+    with open(DATA_VERSION_PATH, "r") as f:
+        old_ver_number = int(f.read())
+
+    cur_ver_number: int = int(os.environ["DATA_VERSION"])
+
+    if cur_ver_number != old_ver_number:
+        from src.db.migration import migrate
+        migrate(old_ver_number, cur_ver_number)
+        os.system("reboot now")
+
+    app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DATABASE_PATH}"
+    db.init_app(app)
+else:
+    from src.db.migration import migrate
+    migrate(-1, 0)
+
+    os.system("reboot now")
 
 # Remove whitespace in jinja
 
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
-
-# Init database
-
-if not os.path.exists(DATABASE_PATH):
-    con = sql.connect(DATABASE_PATH)
-    con.execute(DATABASE_SCHEMA)
-    con.close()
 
 # Register sub-apps
 
@@ -81,20 +94,27 @@ for pickle_jar in os.listdir("content/"):
 
 # Add any new posts to database
 
-con = sql.connect(DATABASE_PATH)
-cur = con.cursor()
+engine = create_engine(f"sqlite:///{DATABASE_PATH}")
 
-for url in posts:
+with Session(engine) as session:
 
-    cur.execute("SELECT * FROM posts WHERE slug = (?)", (url,))
+    for url in posts:
+
+        n = session.query(PostModel).where(PostModel.id == url).count()
+        
+        if n == 0:
+            db.session.add(
+                PostModel(
+                    id=url
+                )
+            )
+        else:
+            continue
     
-    if cur.fetchone() == None:
-        cur.execute("INSERT INTO posts (slug, views) VALUES (?, ?)", (url, 0))
-        con.commit()
-    else:
-        continue
+    session.commit()
 
-con.close()
+engine.dispose()
+del engine
 
 # Sort posts
 

@@ -1,10 +1,6 @@
 import os
-import sqlite3 as sql
-from typing import Any
 from flask import render_template
 from datetime import datetime
-from uuid import uuid4
-import html
 from flask import request, redirect, session, make_response, abort, render_template_string
 from flask_wtf import csrf
 from functools import wraps
@@ -12,16 +8,11 @@ from argon2 import PasswordHasher
 
 from src.shared import htmx
 from src.util import format_datetime
-from src.comments import comment_blueprint, Comment, COMMENTS_SCHEMA, DATABASE_PATH, SubmitCommentForm, COMMENTS_ENABLED, LoginForm, FilterCommentsForm, PASSWORD_PATH, DEFAULT_PASSWORD, ChangePasswordForm
+from src.comments import comment_blueprint, SubmitCommentForm, COMMENTS_ENABLED, LoginForm, FilterCommentsForm, PASSWORD_PATH, DEFAULT_PASSWORD, ChangePasswordForm
+from src.db.models import CommentModel
+from src.db import db
 
 SESSION_TIME_LIMIT: int = 60*60
-
-# Init the DB
-
-if not os.path.exists(DATABASE_PATH):
-    con = sql.connect(DATABASE_PATH)
-    con.execute(COMMENTS_SCHEMA)
-    con.close()
 
 # Init password
 
@@ -50,51 +41,25 @@ def login_required(f):
     return decorated_function
 
 
-def get_comments(slug: str) -> list[Comment]:
+def get_comments(slug: str) -> list[CommentModel]:
     """Returns comments from the database as untreated Comment dataclasses
 
     Args:
         slug (str): The slug of the post associated with the comments.
 
     Returns:
-        list[Comment]: List of comment dataclasses.
+        list[CommentModel]: List of comment dataclasses.
     """
     
-    con = sql.connect(DATABASE_PATH)
-    con.row_factory = sql.Row
-    cur = con.cursor()
-    cur = cur.execute("SELECT * FROM comments WHERE parent = ?", (slug, ))
-    res: list[dict[str, Any]] = cur.fetchall()
+    _comments = db.session.query(CommentModel).where(
+        CommentModel.post == slug
+    ).all()
 
-    cur.close()
-    con.close()
-
-    if len(res) == 0:
-        return []
-    
-    _comments: list[Comment] = []
-
-    for c in res:
-        _comments.append(Comment(**c))
-    
     return _comments
 
-def _get_all_comments() -> list[Comment]:
-    con = sql.connect(DATABASE_PATH)
-    con.row_factory = sql.Row
-    cur = con.cursor()
 
-    cur.execute("SELECT * FROM comments")
-
-    res: list[dict[str, Any]] = cur.fetchall()
-
-    cur.close()
-    con.close()
-
-    _comments: list[Comment] = [Comment(**c) for c in res]
-
-    for c in _comments:
-        c.date = format_datetime(c.date)
+def _get_all_comments() -> list[CommentModel]:
+    _comments = db.session.query(CommentModel).all()
 
     return _comments
 
@@ -109,9 +74,6 @@ def _post_comment():
 
     comments = get_comments(form.slug.data)
 
-    for c in comments:
-        c.date = format_datetime(c.date)
-
     if not form.validate():
         return render_template(
             "comments.j2", 
@@ -119,57 +81,21 @@ def _post_comment():
             enabled=COMMENTS_ENABLED,
             comments=comments,
         )
-
-    # Connect to database
-
-    con = sql.connect(DATABASE_PATH)
-    cur = con.cursor()
-
-    # Generate ID & add record to DB.
-
-    id_found: bool = False
-    _id: str = ""
-
-    while not id_found:
-        _id = uuid4().hex
-
-        cur.execute("SELECT id FROM comments WHERE id = ?", (_id, ))
-
-        if len(cur.fetchall()) == 0:
-            id_found = True
-        else:
-            continue
-
-    date = datetime.now()
-    timestamp = round(date.timestamp())
-
-    cur.execute(
-        """INSERT INTO comments (id, name, parent, comment, date) VALUES (?, ?, ?, ?, ?)""",
-        (
-            _id,
-            html.escape(form.name.data),
-            form.slug.data,
-            html.escape(form.comment.data),
-            timestamp
-        )
-    )
     
-    con.commit()
-
-    cur.close()
-    con.close()
+    db.session.add(CommentModel(
+        post=form.slug.data,
+        name=form.name.data,
+        comment=form.comment.data,
+        date=datetime.now()
+    ))
+    db.session.commit()
 
     # Add submitted comment to list before returning.
+    c = db.session.query(CommentModel).\
+        order_by(CommentModel.date.desc()).\
+        first()
 
-    comments = [
-        Comment(
-            _id,
-            html.escape(form.name.data),
-            form.slug.data,
-            html.escape(form.comment.data),
-            format_datetime(timestamp)
-        )
-    ] + comments
+    comments = [c, *comments]
 
     return render_template(
         "comments.j2",
@@ -225,24 +151,11 @@ def _delete_comment(comment_id=None):
 
     if comment_id == None or not htmx:
         return abort(400)
-    
-    con = sql.connect(DATABASE_PATH)
-    cur = con.cursor()
 
-    # Validate ID
-
-    cur.execute("SELECT id FROM comments WHERE id = ?", (comment_id, ))
-
-    if len(cur.fetchall()) == 0:
-        return abort(404)
-    
-    # does exist so proceed to delete
-
-    cur.execute("DELETE FROM comments WHERE id = ?", (comment_id, ))
-    con.commit()
-
-    cur.close()
-    con.close()
+    db.session.query(CommentModel).\
+        filter(CommentModel.id == comment_id).\
+        delete()
+    db.session.commit()
 
     return ""
 
@@ -255,23 +168,11 @@ def _filter_comments():
         form: FilterCommentsForm = FilterCommentsForm(request.args)
         form.validate()
 
-        con = sql.connect(DATABASE_PATH)
-        con.row_factory = sql.Row
-        cur = con.cursor()
-
-        cur.execute("SELECT * FROM comments WHERE comment LIKE ? OR id == ?", (f"%{form.query.data}%", form.query.data))
-        res: list[dict[str, Any]] = cur.fetchall()
-
-        cur.close()
-        con.close()
-
-        _comments: list[Comment] = []
-
-        for c in res:
-            _comments.append(Comment(**c))
+        _comments = db.session.query(CommentModel).\
+            filter(CommentModel.comment.ilike(f"%{form.query.data}%") | (form.query.data == CommentModel.id)).all()
         
         for c in _comments:
-            c.date = format_datetime(c.date)
+            c.date = format_datetime(c.date.timestamp())
 
         return render_template_string("""
 {%import "admin/partials/comment_row.j2" as row %}

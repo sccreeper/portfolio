@@ -13,6 +13,7 @@ services:
       - CF_TURNSTILE_SECRET
       - CF_TURNSTILE_SITE_KEY
       - RATE_LIMIT
+      - DATA_VERSION=0
     build: .
     ports:
       - "8000:8000"

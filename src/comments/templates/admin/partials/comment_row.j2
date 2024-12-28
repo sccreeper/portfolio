@@ -3,14 +3,14 @@
     <tr id="{{ data.id }}">
     
         <td>{{ data.id }}</td>
-        <td>{{ data.parent }}</td>
+        <td>{{ data.post }}</td>
         <td>{{ data.date }}</td>
         <td>{{ data.name }}</td>
         <td>{{ data.comment|truncate(32, True) }}</td>
 
         <td>
             <button hx-delete="/comments/admin/delete/{{ data.id }}">Delete</button>
-            <a href="/blog/{{ data.parent }}#c-{{ data.id }}" target="_blank">View</a>
+            <a href="/blog/{{ data.post }}#c-{{ data.id }}" target="_blank">View</a>
         </td>
 
     </tr>

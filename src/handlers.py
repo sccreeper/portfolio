@@ -7,13 +7,13 @@ from flask_wtf import FlaskForm
 from wtforms.fields import SelectField, StringField
 import mimetypes
 from flask_wtf import csrf
-import sqlite3 as sql
 
 from src._dataclasses import DateContainer, PostMeta
-from src.constants import DATABASE_PATH
 from src.shared import posts, htmx
 from src.feeds import feed_registry
 from src.comments import SubmitCommentForm, get_comments, COMMENTS_ENABLED
+from src.db.models import PostModel
+from src.db import db
 
 from src.shared import app
 
@@ -41,28 +41,6 @@ def projects():
     else:
         return render_template("projects.j2")
 
-# Database update methods
-
-def increase_post_views(slug: str) -> None:
-    con = sql.connect(DATABASE_PATH)
-    cur = con.cursor()
-
-    cur.execute("UPDATE posts SET views = views + 1 WHERE slug = (?)", (slug,))
-    con.commit()
-
-    con.close()
-
-def get_post_views(slug: str) -> int:
-    con = sql.connect(DATABASE_PATH)
-    cur = con.cursor()
-
-    cur.execute("SELECT views FROM posts WHERE slug = (?)", (slug,))
-    data = cur.fetchone()
-
-    con.close()
-
-    return data[0]
-
 @app.route("/blog/<slug>", methods=["GET"])
 def blog_post(slug: str=None):
     if not slug in posts:
@@ -72,7 +50,12 @@ def blog_post(slug: str=None):
 
     # Increase post views & get database data.
 
-    increase_post_views(slug)
+    db.session.query(PostModel).\
+        where(PostModel.id == slug).\
+        update({"views": PostModel.views + 1})
+    db.session.commit()
+
+    post = db.session.get(PostModel, slug)
 
     form: SubmitCommentForm = SubmitCommentForm()
     form.slug.data = slug
@@ -107,7 +90,7 @@ def blog_post(slug: str=None):
             post=posts[slug].meta,
             sim_posts=sim_posts,
             content=posts[slug].body, 
-            views=get_post_views(slug),
+            views=post.views,
             comments=comments,
             form=form,
             comments_enabled=COMMENTS_ENABLED,
@@ -121,7 +104,7 @@ def blog_post(slug: str=None):
             sim_posts=sim_posts,
             content=posts[slug].body, 
             title=posts[slug].meta.title, 
-            views=get_post_views(slug),
+            views=post.views,
             comments=comments,
             comments_enabled=COMMENTS_ENABLED,
             form=form

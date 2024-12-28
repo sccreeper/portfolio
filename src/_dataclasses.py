@@ -16,8 +16,10 @@ class DateContainer:
     time: str
 
     @staticmethod
-    def create_date(ts: float) -> Self:
-        dt = datetime.fromtimestamp(ts)
+    def create_date(ts: float | datetime) -> Self:
+        dt = ts
+        if type(ts) is float:
+            dt = datetime.fromtimestamp(ts)
 
         return DateContainer(
             timestamp=ts,

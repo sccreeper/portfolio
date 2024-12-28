@@ -19,6 +19,8 @@ flask-limiter = "^3.7.0"
 argon2-cffi = "^23.1.0"
 requests = "^2.32.3"
 flask-compress = "^1.15"
+sqlalchemy = "^2.0.36"
+flask-sqlalchemy = "^3.1.1"
 
 
 [build-system]

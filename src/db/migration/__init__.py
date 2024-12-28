@@ -1,0 +1,1 @@
+from src.db.migration.migrate import migrate

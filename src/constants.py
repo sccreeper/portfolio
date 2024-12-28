@@ -13,7 +13,7 @@ MONTHS = [
     "December"
 ]
 
-DATABASE_PATH: str = "/var/lib/portfolio/posts.db"
+DATABASE_PATH: str = "/var/lib/portfolio/database.db"
 DATABASE_SCHEMA: str = """
 CREATE TABLE "posts" (
 	"slug"	TEXT,
@@ -23,3 +23,5 @@ CREATE TABLE "posts" (
 """
 
 APPS_DATA_PATH: str = "/var/lib/portfolio/apps"
+
+DATA_VERSION_PATH: str = "/var/lib/portfolio/data_version.txt"
