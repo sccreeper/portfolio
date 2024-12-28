@@ -22,7 +22,7 @@ class DateContainer:
             dt = datetime.fromtimestamp(ts)
 
         return DateContainer(
-            timestamp=ts,
+            timestamp=dt.timestamp(),
             date_8601=f"{dt.year}-{dt.month:02}-{dt.day:02}",
             date_mmddyyy=f"{dt.day:02}/{dt.month:02}/{dt.year}",
             date_full=f"{dt.day} {MONTHS[dt.month-1]} {dt.year}",
@@ -30,6 +30,7 @@ class DateContainer:
             iso_full=dt.isoformat()
         )
 
+# Post only dataclasses
 @dataclass(order=True)
 class PostMeta():
     title: str

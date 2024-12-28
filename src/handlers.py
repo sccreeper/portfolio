@@ -9,22 +9,20 @@ import mimetypes
 from flask_wtf import csrf
 
 from src._dataclasses import DateContainer, PostMeta
-from src.shared import posts, htmx
+from src.shared import posts, htmx, app
 from src.feeds import feed_registry
 from src.comments import SubmitCommentForm, get_comments, COMMENTS_ENABLED
 from src.db.models import PostModel
 from src.db import db
 
-from src.shared import app
-
 @app.route("/", methods=["GET"])
 def index():
-    post_data = []
+    post_data: list[PostMeta] = []
 
     if len(posts) < 3:
-        post_data = [v.meta for v in list(posts.values())]
+        post_data = [v.meta for i, (k, v) in enumerate(posts.items()) if i < len(posts)]
     else:
-        post_data = [v.meta for v in list(posts.values())[:3]]
+        post_data = [v.meta for i, (k, v) in enumerate(posts.items()) if i < 3]
 
     if htmx:
         return render_template("partials/home.j2", posts=post_data)

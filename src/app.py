@@ -9,12 +9,11 @@ from flask_compress import Compress
 
 from src.constants import APPS_DATA_PATH, DATA_VERSION_PATH, DATABASE_PATH
 from src._dataclasses import PostData
-from src.shared import posts, htmx
+from src.shared import posts, htmx, app
 from src.util import get_real_ip
 from src.db.models import PostModel
 from src.db import db
 
-from src.shared import app
 app.config["SECRET_KEY"] = os.environ["SECRET"]
 
 @app.context_processor
@@ -25,7 +24,6 @@ def inject_cf_keys():
 def inject_canonical_url():
     can_url = url_for(request.endpoint, **request.view_args) if request.endpoint else ''
     return dict(can_url=can_url)
-
 
 if os.environ["DEBUG"] == "true":
     app.logger.setLevel(logging.DEBUG)
@@ -118,7 +116,9 @@ del engine
 
 # Sort posts
 
-posts = {k: v for k, v in sorted(posts.items(), key=lambda item: item[1].meta.published.timestamp, reverse=True)}
+sorted_items = dict(sorted(posts.items(), key=lambda p: p[1].meta.published.timestamp, reverse=True))
+posts.clear()
+posts.update(sorted_items)
 
 print(f"Found and loaded {len(posts)} post(s)")
 
@@ -129,6 +129,6 @@ if __name__ == "__main__":
     if os.environ["DEBUG"] == "true":
         app.logger.debug(f"Environment variables: {os.environ}")
 
-        app.run(host="0.0.0.0",port=8000, debug=True)
+        app.run(host="0.0.0.0", port=8000, debug=True)
     else:
-        app.run(host="0.0.0.0",port=8000)
+        app.run(host="0.0.0.0", port=8000)
