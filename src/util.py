@@ -2,6 +2,8 @@ from datetime import datetime
 from flask import request as req
 from dataclasses import dataclass
 
+from src.shared import htmx
+
 def format_datetime(timestamp: float) -> str:
     """Returns 'mm:ss - yyyy:mm:dd' formatted date
 
@@ -32,3 +34,6 @@ def get_real_ip() -> str:
         return req.headers[CF_IP_HEADER]
     else:
         return req.remote_addr
+    
+def htmx_cache_key():
+    return f"{req.path}:{'htmx' if htmx else 'not_htmx'}"

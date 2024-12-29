@@ -9,13 +9,15 @@ import mimetypes
 from flask_wtf import csrf
 
 from src._dataclasses import DateContainer, PostMeta
-from src.shared import posts, htmx, app
+from src.shared import posts, htmx, cache, app
 from src.feeds import feed_registry
 from src.comments import SubmitCommentForm, get_comments, COMMENTS_ENABLED
 from src.db.models import PostModel
 from src.db import db
+from src.util import htmx_cache_key
 
 @app.route("/", methods=["GET"])
+@cache.cached(make_cache_key=htmx_cache_key, timeout=0)
 def index():
     post_data: list[PostMeta] = []
 
@@ -33,6 +35,7 @@ def index():
         )
 
 @app.route("/projects", methods=["GET"])
+@cache.cached(make_cache_key=htmx_cache_key, timeout=0)
 def projects():
     if htmx:
         return render_template("partials/projects.j2")
@@ -122,6 +125,7 @@ class PostsForm(FlaskForm):
     query = StringField("Search: ", default="", render_kw={"placeholder" : "Search"})
 
 @app.route("/posts", methods=["GET"])
+@cache.cached(make_cache_key=htmx_cache_key, query_string=True, timeout=0)
 def _posts():
     # Sort the posts based on form data.
 
@@ -154,6 +158,7 @@ def _posts():
         )
 
 @app.route("/og/<slug>", methods=["GET"])
+@cache.cached(make_cache_key=htmx_cache_key, query_string=True, timeout=0)
 def opengraph(slug=None):
     if not slug in posts:
         return abort(404)
@@ -195,6 +200,7 @@ def opengraph(slug=None):
         return send_file(buffer, mimetype=mimetypes.types_map[".png"])
 
 @app.route("/feeds/<feed_type>", methods=["GET"])
+@cache.cached(timeout=0)
 def _feeds(feed_type: str = None):
 
     if not feed_type in feed_registry:

@@ -9,12 +9,13 @@ from flask_compress import Compress
 
 from src.constants import APPS_DATA_PATH, DATA_VERSION_PATH, DATABASE_PATH
 from src._dataclasses import PostData
-from src.shared import posts, htmx, app
+from src.shared import posts, htmx, cache, app
 from src.util import get_real_ip
 from src.db.models import PostModel
 from src.db import db
 
 app.config["SECRET_KEY"] = os.environ["SECRET"]
+app.config["DEBUG"] = os.environ["DEBUG"] == "true"
 
 @app.context_processor
 def inject_cf_keys():
@@ -32,14 +33,16 @@ else:
 
 limiter = Limiter(
     get_real_ip,
-    app=app,
     default_limits=[f"{os.environ["RATE_LIMIT"]} per second"],
     storage_uri="memory://"
 )
 
-htmx.init_app(app)
 compress = Compress()
+
 compress.init_app(app)
+htmx.init_app(app)
+cache.init_app(app)
+limiter.init_app(app)
 
 if os.path.exists(DATA_VERSION_PATH):
     old_ver_number: int
@@ -129,6 +132,6 @@ if __name__ == "__main__":
     if os.environ["DEBUG"] == "true":
         app.logger.debug(f"Environment variables: {os.environ}")
 
-        app.run(host="0.0.0.0", port=8000, debug=True)
+        app.run(host="0.0.0.0", port=8000)
     else:
         app.run(host="0.0.0.0", port=8000)
