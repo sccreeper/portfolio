@@ -44,7 +44,7 @@ def process_image(img_src: str) -> str:
     else:
         print(f"Processing '{img_src}'")
 
-        subprocess.call(["magick", "convert", img_src, "-quality", QUALITY_VALUES[ext], filepath + ".avif"])
+        subprocess.call(["magick", img_src, "-quality", QUALITY_VALUES[ext], f"{filepath}.avif"])
         os.remove(img_src)
         
         processed_images.append(img_src)
