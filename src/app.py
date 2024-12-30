@@ -6,9 +6,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from flask_limiter import Limiter
 from flask_compress import Compress
+import subprocess
 
-from src.constants import APPS_DATA_PATH, DATA_VERSION_PATH, DATABASE_PATH
-from src._dataclasses import PostData
+from src.constants import APPS_DATA_PATH, DATA_VERSION_PATH, DATABASE_PATH, COMMIT_DATE, COMMIT_HASH
+from src._dataclasses import PostData, DateContainer
 from src.shared import posts, htmx, cache, app
 from src.util import get_real_ip
 from src.db.models import PostModel
@@ -18,8 +19,14 @@ app.config["SECRET_KEY"] = os.environ["SECRET"]
 app.config["DEBUG"] = os.environ["DEBUG"] == "true"
 
 @app.context_processor
-def inject_cf_keys():
-    return dict(cfsitekey=os.environ["CF_TURNSTILE_SITE_KEY"])
+@cache.cached()
+def global_context_vars():
+
+    return {
+        "cfsitekey" : os.environ["CF_TURNSTILE_SITE_KEY"],
+        "commit_hash" : COMMIT_HASH,
+        "commit_date" : DateContainer.create_date(float(COMMIT_DATE))
+    }
 
 @app.context_processor
 def inject_canonical_url():
@@ -54,7 +61,7 @@ if os.path.exists(DATA_VERSION_PATH):
     if cur_ver_number != old_ver_number:
         from src.db.migration import migrate
         migrate(old_ver_number, cur_ver_number)
-        os.system("reboot now")
+        subprocess.call(["reboot", "now"])
 
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DATABASE_PATH}"
     db.init_app(app)
@@ -62,7 +69,7 @@ else:
     from src.db.migration import migrate
     migrate(-1, 0)
 
-    os.system("reboot now")
+    subprocess.call(["reboot", "now"])
 
 # Remove whitespace in jinja
 

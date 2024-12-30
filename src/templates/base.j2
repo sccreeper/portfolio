@@ -83,8 +83,26 @@
         <p class="text-xs text-center m-2">
           Made by <a href="/" class="underline">Oscar Peace</a>. 
           Source available at <a class="underline" target="_blank" href="https://github.com/sccreeper/portfolio"><i class="bi bi-github"></i> sccreeper/portfolio</a>.
+          Version <a href="https://github.com/sccreeper/portfolio/commit/{{commit_hash}}"><b>{{commit_hash|truncate(8, True, '')}}</b></a> at <b id="commit-date">{{commit_date.iso_full}}</b>.
         </p>
       </footer>
   </body>
 </html>
+
+<script>
+
+    const commitTs = "{{ commit_date.timestamp }}";
+    const commitDate = "{{ commit_date.iso_full }}";
+
+    const elCommitDate = document.getElementById("commit-date");
+
+    elCommitDate.addEventListener("mouseenter", () => {
+      elCommitDate.innerHTML = commitTs;
+    })
+
+    elCommitDate.addEventListener("mouseleave", () => {
+      elCommitDate.innerHTML = commitDate;
+    })
+
+</script>
 <!-- Hello there --> 

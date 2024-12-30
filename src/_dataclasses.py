@@ -8,6 +8,9 @@ from src.constants import MONTHS
 
 @dataclass
 class DateContainer:
+    """
+    Wrapper around `datetime.datetime` in order to provide some extra formats.
+    """
     timestamp: float
     date_8601: str
     date_full: str
