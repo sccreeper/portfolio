@@ -17,7 +17,7 @@ from src.db import db
 from src.util import htmx_cache_key
 
 @app.route("/", methods=["GET"])
-@cache.cached(make_cache_key=htmx_cache_key, timeout=0)
+@cache.cached(make_cache_key=lambda: htmx_cache_key(False), timeout=0)
 def index():
     post_data: list[PostMeta] = []
 
@@ -35,7 +35,7 @@ def index():
         )
 
 @app.route("/projects", methods=["GET"])
-@cache.cached(make_cache_key=htmx_cache_key, timeout=0)
+@cache.cached(make_cache_key=lambda: htmx_cache_key(False), timeout=0)
 def projects():
     if htmx:
         return render_template("partials/projects.j2")
@@ -125,7 +125,7 @@ class PostsForm(FlaskForm):
     query = StringField("Search: ", default="", render_kw={"placeholder" : "Search"})
 
 @app.route("/posts", methods=["GET"])
-@cache.cached(make_cache_key=htmx_cache_key, query_string=True, timeout=0)
+@cache.cached(make_cache_key=lambda: htmx_cache_key(True), timeout=0)
 def _posts():
     # Sort the posts based on form data.
 
@@ -158,7 +158,7 @@ def _posts():
         )
 
 @app.route("/og/<slug>", methods=["GET"])
-@cache.cached(make_cache_key=htmx_cache_key, query_string=True, timeout=0)
+@cache.cached(make_cache_key=lambda: htmx_cache_key(False), timeout=0)
 def opengraph(slug=None):
     if not slug in posts:
         return abort(404)

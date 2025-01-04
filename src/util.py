@@ -35,5 +35,8 @@ def get_real_ip() -> str:
     else:
         return req.remote_addr
     
-def htmx_cache_key():
-    return f"{req.path}:{'htmx' if htmx else 'not_htmx'}"
+def htmx_cache_key(qs: bool):
+    if qs:
+        return f"{req.path}:{str(req.query_string)}:{'htmx' if htmx else 'not_htmx'}"
+    else:
+        return f"{req.path}:{'htmx' if htmx else 'not_htmx'}"
