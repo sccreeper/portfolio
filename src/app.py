@@ -111,7 +111,7 @@ with Session(engine) as session:
         n = session.query(PostModel).where(PostModel.id == url).count()
         
         if n == 0:
-            db.session.add(
+            session.add(
                 PostModel(
                     id=url
                 )

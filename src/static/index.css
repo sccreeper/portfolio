@@ -47,8 +47,20 @@ a:visited {
     @apply dark:text-white;
 }
 
-li::before {
+ol {
+    @apply list-decimal
+}
+
+ul > li::marker {
     content: " - "
+}
+
+li::marker {
+    @apply font-bold;
+}
+
+ul, ol {
+    @apply list-inside;
 }
 
 li {
