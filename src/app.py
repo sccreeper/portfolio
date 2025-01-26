@@ -37,7 +37,7 @@ def inject_canonical_url():
 # Used for embedding posts in other pages. Mostly used for unlisted posts.
 @app.template_global()
 def post_body(slug: str):
-    return do_mark_safe(f"<section class=\"blog-content\">{posts[slug].body}</section>")
+    return do_mark_safe(f"<section class=\"rich-text-content\">{posts[slug].body}</section>")
 
 if os.environ["DEBUG"] == "true":
     app.logger.setLevel(logging.DEBUG)
