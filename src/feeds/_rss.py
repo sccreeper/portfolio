@@ -1,4 +1,4 @@
-from src._dataclasses import PostMeta
+from src._dataclasses import PostData
 from xml.etree import ElementTree as ET
 from src.feeds import FeedInterface, DEFAULT_TITLE, DEFAULT_DESCRIPTION, DEFAULT_URL
 import datetime
@@ -28,22 +28,25 @@ _GENERATOR_EL.text = "Oscar Peace's Blog Engine"
 
 ET.SubElement(DEFAULT_CHANNEL, "atom:link", attrib={"href" : "https://www.oscarcp.net/feeds/rss", "rel":"self", "type":"application/rss+xml"})
 
-def _post_to_element(post: PostMeta) -> ET.Element:
+def _post_to_element(post: PostData) -> ET.Element:
 
     root = ET.Element("item")
     
     title = ET.SubElement(root, "title")
-    title.text = post.title
+    title.text = post.meta.title
     link = ET.SubElement(root, "link")
-    link.text = f"https://www.oscarcp.net/blog/{post.slug}"
+    link.text = f"https://www.oscarcp.net/blog/{post.meta.slug}"
     
     desc = ET.SubElement(root, "description")
-    desc.text = post.summary
+    desc.text = post.meta.summary
 
     pub_date = ET.SubElement(root, "pubDate")
-    pub_date.text = format_datetime(datetime.datetime.fromtimestamp(post.published.timestamp))
+    pub_date.text = format_datetime(datetime.datetime.fromtimestamp(post.meta.published.timestamp))
     guid = ET.SubElement(root, "guid")
-    guid.text = f"https://www.oscarcp.net/blog/{post.slug}"
+    guid.text = f"https://www.oscarcp.net/blog/{post.meta.slug}"
+
+    content = ET.SubElement(root, "content:encoded")
+    content.text = f"<![CDATA[ {post.body} ]]>"
 
     return root
 
@@ -52,7 +55,7 @@ class RSSFeed(FeedInterface):
     extension = ".xml"
     file = "rss.xml"
 
-    def generate_feed(_posts: list[PostMeta]) -> bytes:
+    def generate_feed(_posts: list[PostData]) -> bytes:
         root_copy = DEFAULT_ROOT
         channel = root_copy.find("channel")
 

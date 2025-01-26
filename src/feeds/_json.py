@@ -1,4 +1,4 @@
-from src._dataclasses import PostMeta
+from src._dataclasses import PostData
 from src.feeds import FeedInterface, DEFAULT_TITLE, DEFAULT_DESCRIPTION, DEFAULT_URL
 import datetime
 import json
@@ -16,7 +16,7 @@ class JSONFeed(FeedInterface):
     extension = ".json"
     type = "json"
 
-    def generate_feed(_posts: list[PostMeta]) -> bytes:
+    def generate_feed(_posts: list[PostData]) -> bytes:
         feed_template_copy = _FEED_TEMPLATE
 
         feed_template_copy["items"] = []
@@ -24,12 +24,12 @@ class JSONFeed(FeedInterface):
         for post in _posts:
             feed_template_copy["items"].append(
                 {
-                    "id": f"https://www.oscarcp.net/blog/{post.slug}",
-                    "url": f"https://www.oscarcp.net/blog/{post.slug}",
-                    "summary": post.summary,
-                    "title": post.title,
-                    "content_text": "",
-                    "date_published": datetime.datetime.fromtimestamp(post.published.timestamp).isoformat()
+                    "id": f"https://www.oscarcp.net/blog/{post.meta.slug}",
+                    "url": f"https://www.oscarcp.net/blog/{post.meta.slug}",
+                    "summary": post.meta.summary,
+                    "title": post.meta.title,
+                    "content_text": post.body,
+                    "date_published": datetime.datetime.fromtimestamp(post.meta.published.timestamp).isoformat()
                 }
             )
 

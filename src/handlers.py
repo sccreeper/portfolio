@@ -19,19 +19,19 @@ from src.util import htmx_cache_key
 @app.route("/", methods=["GET"])
 @cache.cached(make_cache_key=lambda: htmx_cache_key(False), timeout=0)
 def index():
-    post_data: list[PostMeta] = []
+    post_meta: list[PostMeta] = []
 
     if len(posts) < 3:
-        post_data = [v.meta for i, (k, v) in enumerate(posts.items()) if i < len(posts)]
+        post_meta = [v.meta for i, (k, v) in enumerate(filter(lambda x: not x[1].meta.unlisted, posts.items()))]
     else:
-        post_data = [v.meta for i, (k, v) in enumerate(posts.items()) if i < 3]
+        post_meta = [v.meta for i, (k, v) in enumerate(filter(lambda x: not x[1].meta.unlisted, posts.items())) if i < 3]
 
     if htmx:
-        return render_template("partials/home.j2", posts=post_data)
+        return render_template("partials/home.j2", posts=post_meta)
     else:
         return render_template(
             "home.j2",
-            posts=post_data 
+            posts=post_meta 
         )
 
 @app.route("/projects", methods=["GET"])
@@ -147,6 +147,9 @@ def _posts():
         reverse=(form.dir.data == "desc")
     )
 
+    # Remove unlisted posts
+    _posts_temp = list(filter(lambda x: not x.unlisted, _posts_temp))
+
     if htmx:
         return render_template("partials/posts.j2", posts=_posts_temp, count=len(_posts_temp), form=form)
     else:
@@ -207,7 +210,11 @@ def _feeds(feed_type: str = None):
         return abort(404)
 
     buffer = BytesIO()
-    buffer.write(feed_registry[feed_type].generate_feed([v.meta for v in list(posts.values())][:5]))
+    buffer.write(
+        feed_registry[feed_type].generate_feed(
+            [v for v in list(filter(lambda x: not x.meta.unlisted, posts.values()))][:5]
+        )
+    )
     buffer.seek(0)
 
     return send_file(

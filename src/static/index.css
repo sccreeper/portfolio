@@ -34,7 +34,7 @@ h2 {
     @apply text-lg;
 };
 
-p {
+p, span {
     @apply text-base;
 }
 
@@ -137,7 +137,7 @@ header {
     @apply w-full inset-2 sm:w-2/4 sm:m-auto p-4 sm:top-4 sm:bottom-4;
 }
 
-#blog-content > p {
+.rich-text-content > p {
     @apply mt-3;
     @apply mb-3;
 }
@@ -253,7 +253,7 @@ footer {
 
 /* Blog styles */
 
-#blog-content {
+.rich-text-content {
     h1 {
         @apply font-semibold;
     }
@@ -272,11 +272,11 @@ code {
     @apply text-sm;
 }
 
-#blog-content a {
+.rich-text-content a {
     @apply underline;
 }
 
-#blog-content img {
+.rich-text-content img {
     @apply m-2;
     @apply border;
     @apply border-black;
@@ -287,13 +287,13 @@ code {
     @apply block ml-auto mr-auto;
 }
 
-#blog-content figcaption {
+.rich-text-content figcaption {
     text-align: center;
     @apply text-sm;
     @apply italic;
 }
 
-#blog-content blockquote {
+.rich-text-content blockquote {
     @apply ml-4;
     @apply pl-4;
     @apply mb-3;
@@ -303,17 +303,17 @@ code {
     @apply dark:border-l-white;
 }
 
-#blog-content table, th, td {
+.rich-text-content table, th, td {
     @apply border;
     @apply border-black;
     @apply dark:border-white;
 }
 
-#blog-content table {
+.rich-text-content table {
     @apply border-collapse;
 }
 
-#blog-content td, th {
+.rich-text-content td, th {
     @apply p-1;
 }
 

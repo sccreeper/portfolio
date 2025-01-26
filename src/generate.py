@@ -18,6 +18,7 @@ def post_from_metadata(metadata: dict, url: str, length: int) -> PostMeta:
                 datetime(year=int(t[2]),month=int(t[1]),day=int(t[0])).timestamp()
             ),
             slug=url,
+            unlisted=url[0] == '.',
             length=length,
         )
 
@@ -41,6 +42,7 @@ def main():
                 AnchorTargetExtension(), 
                 HeaderAnchorExtension(),
                 ImageProcessorExtension(),
+                ColourExtension(),
                 ]
             )
 

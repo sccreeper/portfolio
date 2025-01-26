@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+    font-family: 'Fira Mono', monospace;
+    @apply text-black;
+    @apply dark:text-white;
+}
 
 img {
     @apply border;

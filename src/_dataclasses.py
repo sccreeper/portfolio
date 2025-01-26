@@ -42,6 +42,7 @@ class PostMeta():
     tags: list[str]
     published: DateContainer
     slug: str
+    unlisted: bool
 
     length: int
 

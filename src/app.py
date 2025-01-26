@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from flask_limiter import Limiter
 from flask_compress import Compress
 import subprocess
+from jinja2.filters import do_mark_safe
 
 from src.constants import APPS_DATA_PATH, DATA_VERSION_PATH, DATABASE_PATH, COMMIT_DATE, COMMIT_HASH
 from src._dataclasses import PostData, DateContainer
@@ -32,6 +33,11 @@ def global_context_vars():
 def inject_canonical_url():
     can_url = url_for(request.endpoint, **request.view_args) if request.endpoint else ''
     return dict(can_url=can_url)
+
+# Used for embedding posts in other pages. Mostly used for unlisted posts.
+@app.template_global()
+def post_body(slug: str):
+    return do_mark_safe(f"<section class=\"blog-content\">{posts[slug].body}</section>")
 
 if os.environ["DEBUG"] == "true":
     app.logger.setLevel(logging.DEBUG)
