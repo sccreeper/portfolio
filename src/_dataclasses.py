@@ -14,7 +14,7 @@ class DateContainer:
     timestamp: float
     date_8601: str
     date_full: str
-    date_mmddyyy: str
+    date_mmddyyyy: str
     iso_full: str
     time: str
 
@@ -27,7 +27,7 @@ class DateContainer:
         return DateContainer(
             timestamp=dt.timestamp(),
             date_8601=f"{dt.year}-{dt.month:02}-{dt.day:02}",
-            date_mmddyyy=f"{dt.day:02}/{dt.month:02}/{dt.year}",
+            date_mmddyyyy=f"{dt.day:02}/{dt.month:02}/{dt.year}",
             date_full=f"{dt.day} {MONTHS[dt.month-1]} {dt.year}",
             time=f"{dt.hour:02}:{dt.minute:02}",
             iso_full=dt.isoformat()

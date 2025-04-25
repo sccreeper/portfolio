@@ -196,7 +196,7 @@ def opengraph(slug=None):
 
         draw.text(
             (16, 224),
-            f"{p.published.date_mmddyyy}",
+            f"{p.published.date_mmddyyyy}",
             fill=(255, 255, 255),
             font=ImageFont.truetype("src/static/fonts/FiraMono-Bold.ttf", size=18)
         )
