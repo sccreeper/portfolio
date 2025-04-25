@@ -1,0 +1,30 @@
+{% extends "base.j2" %}
+
+{% block title %}
+
+{{ error_code }}
+
+{% endblock title %}
+
+{% block content %}
+
+<h1>{{error_code}} <a style="text-decoration: underline;" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/{{error_code}}">?</a></h1>
+
+<p>{{error_message}}</p>
+
+{% if error_code == 404 %}
+
+<p>Try going <a style="text-decoration: underline;" href="/">home</a>.</p>
+
+{% elif error_code == 500 %}
+
+<p>Something bad happened.</p>
+
+{% elif error_code == 403 %}
+
+<p>You shouldn't have done that.</p>
+
+{% endif %}
+
+{% endblock content %}
+

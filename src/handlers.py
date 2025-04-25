@@ -15,6 +15,17 @@ from src.comments import SubmitCommentForm, get_comments, COMMENTS_ENABLED
 from src.db.models import PostModel
 from src.db import db
 from src.util import htmx_cache_key
+from werkzeug.exceptions import HTTPException, InternalServerError, NotFound, Forbidden, TooManyRequests
+
+def handle_exception(e: HTTPException):
+    return render_template(
+        "error.j2",
+        error_code=e.code,
+        error_message=e.description
+    ), e.code
+
+for err in (InternalServerError, NotFound, Forbidden, TooManyRequests):
+    app.register_error_handler(err, handle_exception)
 
 @app.route("/", methods=["GET"])
 @cache.cached(make_cache_key=lambda: htmx_cache_key(False), timeout=0)
