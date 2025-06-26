@@ -4,7 +4,7 @@ from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import operator
 from flask_wtf import FlaskForm
-from wtforms.fields import SelectField, StringField
+from wtforms.fields import SelectField, StringField, HiddenField
 import mimetypes
 from flask_wtf import csrf
 
@@ -133,7 +133,9 @@ class PostsForm(FlaskForm):
     prop = SelectField("Sort by: ", choices=[("timestamp", "Date"), ("title", "Title"), ("length", "Length")], default="timestamp", coerce=str)
     dir = SelectField("Direction: ", choices=[("asc", "Ascending"), ("desc", "Descending")], default="desc", coerce=str)
 
-    query = StringField("Search: ", default="", render_kw={"placeholder" : "Search"})
+    tags = StringField("Tags: ", default="", render_kw={"placeholder" : "python, go"})
+
+    query = StringField("Search: ", default="", render_kw={"placeholder" : "A post"})
 
 @app.route("/posts", methods=["GET"])
 @cache.cached(make_cache_key=lambda: htmx_cache_key(True), timeout=0)
@@ -145,11 +147,23 @@ def _posts():
     if not form.validate():
         form.process()
 
+    # Filter based on search query
+
     if not form.query.data == "":
         # Worst list comprehension ever written.
-        _posts_temp = [post for post in [v.meta for v in list(posts.values())] if form.query.data.lower() in post.title.lower() or form.query.data.lower() in [tag.lower() for tag in post.tags]]
+        _posts_temp = [\
+            post for post in [v.meta for v in list(posts.values())] if form.query.data.lower() in post.title.lower() or form.query.data.lower() in [tag.lower() for tag in post.tags]
+        ]
     else:
         _posts_temp = [v.meta for v in list(posts.values())]
+
+    # Filter based on tags
+
+    if len(form.tags.data.split(",")) > 1: # for some reason splitting an empty string still returns an array with 1 item
+
+        tag_set: set[str] = {t.lower() for t in [s.strip() for s in form.tags.data.split(",")]}
+
+        _posts_temp = [v.meta for v in list(posts.values()) if len({t.lower() for t in v.meta.tags} & tag_set) == len(tag_set)]
 
     _posts_temp.sort(
         key=operator.attrgetter(

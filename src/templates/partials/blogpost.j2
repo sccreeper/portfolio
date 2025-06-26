@@ -7,7 +7,7 @@
   <h1><b>{{post.title}}</b></h1>
   <h2>{{post.summary}}</h2>
   <p><b>Tags:</b> {% for tag in post.tags %}
-  {{tag}}
+  <a hx-trigger="click" hx-get="/posts?tags={{tag}}" hx-push-url="true" hx-target="#content-block" hx-replace="innerHTML" href="/posts?tags={{tag}}" style="display: inline;">{{tag}}</a>
   {% endfor %}</p>
   <p>{{views}} views</p>
   <h2>{{post.authour}} - <time datetime="{{post.published.date_8601}}">{{post.published.date_full}}</time></h2>

@@ -82,6 +82,7 @@ input[type=text],textarea {
 input[type=text]::placeholder,textarea::placeholder {
     @apply text-black;
     @apply dark:text-white;
+    @apply italic;
 }
 
 select {
