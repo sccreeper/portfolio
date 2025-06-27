@@ -159,7 +159,7 @@ def _posts():
 
     # Filter based on tags
 
-    if len(form.tags.data.split(",")) > 1: # for some reason splitting an empty string still returns an array with 1 item
+    if len(form.tags.data) != 0:
 
         tag_set: set[str] = {t.lower() for t in [s.strip() for s in form.tags.data.split(",")]}
 
