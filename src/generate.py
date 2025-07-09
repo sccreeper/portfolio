@@ -43,6 +43,7 @@ def main():
                 HeaderAnchorExtension(),
                 ImageProcessorExtension(),
                 ColourExtension(),
+                IconExtension()
                 ]
             )
 

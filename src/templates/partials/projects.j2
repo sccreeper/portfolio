@@ -3,11 +3,11 @@
 <title hx-swap-oob="outerHTML:title">Projects - Oscar Peace</title>
 
 <h1>Projects</h1>
-<p>This page contains a list of all of my projects.</p>
+<p>This page contains a list of all of my projects. For more detailed information go to their respective webpages or repositories.</p>
 
 {{project.project(
     "goputer",
-    "A fantasy virtual machine written in Go",
+    "A fantasy virtual machine written in Go.",
     "/static/images/goputer_logo.png",
     "https://goputer.oscarcp.net",
     "Website",
@@ -16,7 +16,7 @@
 
 {{project.project(
     "Chime",
-    "A music streaming server. Made using Go, Flutter and Dart",
+    "A music streaming server. Made using Go, Dart, Flutter, and SvelteKit.",
     "/static/images/chime_logo.png",
     "https://github.com/sccreeper/chime",
     "Repository",
@@ -25,9 +25,27 @@
 
 {{project.project(
     "image2excel",
-    "A program that converts images into Excel spreadsheets. Working on support for multithreading and video. Written in Go, originally written in Python.",
-    "",
+    "A program that converts images into Excel spreadsheets. Written in Go, originally written in Python.",
+    "/static/images/image2excel_logo.png",
     "https://github.com/sccreeper/image2excel",
+    "Repository",
+    "git"
+)}}
+
+{{project.project(
+    "EarthMC stats",
+    "SvelteKit app that pulls and displays data from the EarthMC API.",
+    "/static/images/earthmcstats.png",
+    "https://emc.oscarcp.net",
+    "Website",
+    "globe"
+)}}
+
+{{project.project(
+    "signpost",
+    "A self hosted URL shortener service written in Python using Flask.",
+    "/static/images/signpost_logo.png",
+    "https://github.com/sccreeper/signpost",
     "Repository",
     "git"
 )}}
@@ -48,13 +66,4 @@
     "https://github.com/sccreeper/replbot",
     "Repository",
     "git"
-)}}
-
-{{project.project(
-    "EarthMC stats",
-    "SvelteKit app that pulls and displays data from the EarthMC API.",
-    "/static/images/earthmcstats.png",
-    "https://emc.oscarcp.net",
-    "Website",
-    "globe"
 )}}
