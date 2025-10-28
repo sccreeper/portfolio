@@ -278,6 +278,8 @@ In this case, `pri` prevents interrupts, and `eni` re-enables them. The instruct
 
 # Conclusion
 
+![](/content/assets/goputer/pong.png "The pong program running in the web frontend")
+
 The next steps are probably to write a better *Pong* clone rather than the quite simple one I've got now, and also finding a way to speed up the VM - which will almost certainly require writing some of the rendering instructions in assembly. The other major improvement I have made since the last post has been to rewrite the expansion system around Lua instead of Go's `plugin` library, meaning that it is now cross platform.
 
 Other than making the VM faster a proper IDE or even a VSCode extension would be nice.
