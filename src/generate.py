@@ -5,6 +5,11 @@ from src._dataclasses import PostData, PostMeta, DateContainer
 from datetime import datetime
 import pickle
 
+from markdown.extensions.meta import MetaExtension
+from markdown.extensions.fenced_code import FencedCodeExtension
+from markdown.extensions.tables import TableExtension
+from markdown.extensions.footnotes import FootnoteExtension
+
 def post_from_metadata(metadata: dict, url: str, length: int) -> PostMeta:
 
     t = metadata["published"][0].split("/")
@@ -35,9 +40,10 @@ def main():
 
     md = markdown.Markdown(
             extensions=[
-                "meta", 
-                "fenced_code",
-                "tables",
+                MetaExtension(), 
+                FencedCodeExtension(),
+                TableExtension(),
+                FootnoteExtension(BACKLINK_TEXT="^", SUPERSCRIPT_TEXT="[{}]"),
                 SlideshowExtension(), 
                 AnchorTargetExtension(), 
                 HeaderAnchorExtension(),
@@ -66,6 +72,8 @@ def main():
                 ),
                 body=body
             )
+
+            md.reset()
 
             with open(f"{slug}.pkl", "wb") as pklf:
                 pickle.dump(p, pklf)

@@ -32,9 +32,12 @@ h1 {
 
 h2 {
     @apply text-lg;
-};
+}
 
-p, span {
+;
+
+p,
+span {
     @apply text-base;
 }
 
@@ -51,7 +54,7 @@ ol {
     @apply list-decimal
 }
 
-ul > li::marker {
+ul>li::marker {
     content: " - "
 }
 
@@ -59,7 +62,8 @@ li::marker {
     @apply font-bold;
 }
 
-ul, ol {
+ul,
+ol {
     @apply list-inside;
 }
 
@@ -70,7 +74,8 @@ li {
 
 /* Input styling */
 
-input[type=text],textarea {
+input[type=text],
+textarea {
     @apply bg-white;
     @apply dark:bg-black;
     @apply outline-none;
@@ -79,7 +84,8 @@ input[type=text],textarea {
     @apply dark:border-b-white;
 }
 
-input[type=text]::placeholder,textarea::placeholder {
+input[type=text]::placeholder,
+textarea::placeholder {
     @apply text-black;
     @apply dark:text-white;
     @apply italic;
@@ -138,7 +144,7 @@ header {
     @apply w-full inset-2 sm:w-2/4 sm:m-auto p-4 sm:top-4 sm:bottom-4;
 }
 
-.rich-text-content > p {
+.rich-text-content>p {
     @apply mt-3;
     @apply mb-3;
 }
@@ -149,13 +155,13 @@ footer {
 }
 
 .project-div {
-    
+
     @apply m-4;
 
     @apply border-b;
     @apply border-b-black;
     @apply dark:border-b-white;
-    
+
     @apply grid;
     @apply grid-rows-1;
     @apply grid-cols-2;
@@ -238,17 +244,17 @@ footer {
     @apply pr-3;
 }
 
-.post-link > p {
+.post-link>p {
     @apply text-sm;
 }
 
-.post-link > h3 > i {
+.post-link>h3>i {
     @apply opacity-0;
     @apply float-right;
     @apply transition-opacity;
 }
 
-.post-link:hover > h3 > i {
+.post-link:hover>h3>i {
     @apply opacity-100;
 }
 
@@ -259,8 +265,35 @@ footer {
         @apply font-semibold;
     }
 
-    h2 {
+    h2, h3 {
         @apply font-medium;
+    }
+
+    /* This horrible selector is to avoid selecting italicised admonitions at the top of articles. */
+
+    p:not(:has(> em:only-child))::first-letter {
+        font-size: 3rem;
+        line-height: 0.85;
+        margin-top: 0.1em;
+        
+        @apply font-semibold;
+        @apply mr-2;
+        @apply float-left;
+    }
+
+    p:not(:has(> em:only-child)) ~ p:not(:has(> em:only-child))::first-letter {
+        @apply text-base;
+        font-weight: inherit;
+        @apply m-0;
+        @apply float-none;
+    }
+
+    sup:has(> a:only-child) {
+        @apply font-semibold;
+
+        > a {
+            @apply no-underline;
+        }
     }
 }
 
@@ -304,7 +337,9 @@ code {
     @apply dark:border-l-white;
 }
 
-.rich-text-content table, th, td {
+.rich-text-content table,
+th,
+td {
     @apply border;
     @apply border-black;
     @apply dark:border-white;
@@ -314,22 +349,26 @@ code {
     @apply border-collapse;
 }
 
-.rich-text-content td, th {
+.rich-text-content td,
+th {
     @apply p-1;
 }
 
-.header { 
+.header {
 
-    h1, h2, h3 {
+    h1,
+    h2,
+    h3 {
         @apply inline;
     }
 
-    a { 
+    a {
         @apply !no-underline;
         @apply mr-2;
     }
 
 }
+
 .comment {
     @apply p-1;
 }
@@ -343,50 +382,64 @@ code {
     @apply whitespace-pre-wrap;
 }
 
+/* Footnotes */
+
+.footnote {
+
+    & li>p {
+        @apply inline;
+    }
+
+    & li>p a:last-child {
+        @apply no-underline;
+        @apply font-bold;
+    }
+
+}
+
 /* HLJS */
 
 .hljs {
-background: #000000;
-color: #a39e9b;
-@apply m-2; 
+    background: #000000;
+    color: #a39e9b;
+    @apply m-2;
 }
 
 .hljs-attr,
 .hljs-template-tag {
-color: #8787d7;
+    color: #8787d7;
 }
 
 .hljs-comment,
 .hljs-doctag,
 .hljs-quote {
-color: #339966;
+    color: #339966;
 }
 
 .hljs-params {
-color: #a39e9b;
+    color: #a39e9b;
 }
 
 .hljs-regexp {
-color: #d700ff;
+    color: #d700ff;
 }
 
 .hljs-tag,
 .hljs-selector-id,
 .hljs-number,
 .hljs-literal {
-color: #ef5350;
+    color: #ef5350;
 }
 
 .hljs-meta,
 .hljs-meta .hljs-keyword {
 
-color: #0087ff;
+    color: #0087ff;
 }
 
 /* opt-out */
 .hljs-operator,
-.hljs-punctuation{
-}
+.hljs-punctuation {}
 
 .hljs-selector-class,
 .hljs-code,
@@ -397,13 +450,13 @@ color: #0087ff;
 .hljs-selector-pseudo,
 .hljs-link,
 .hljs-keyword {
-color: #64b5f6;
+    color: #64b5f6;
 }
 
 .hljs-built_in,
 .hljs-title,
 .hljs-deletion {
-color: #ff8700;
+    color: #ff8700;
 }
 
 .hljs-type,
@@ -412,7 +465,7 @@ color: #ff8700;
 .hljs-name,
 .hljs-property,
 .hljs-attribute {
-color: #ffd75f;
+    color: #ffd75f;
 }
 
 .hljs-meta .hljs-string,
@@ -421,18 +474,17 @@ color: #ffd75f;
 .hljs-symbol,
 .hljs-bullet,
 .hljs-addition {
-color: #558b2f;
+    color: #558b2f;
 }
 
 .hljs-selector-tag {
-color: #9966ff;
+    color: #9966ff;
 }
 
 .hljs-emphasis {
-font-style: italic;
+    font-style: italic;
 }
 
 .hljs-strong {
-font-weight: bold;
+    font-weight: bold;
 }
-
