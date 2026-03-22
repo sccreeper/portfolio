@@ -763,6 +763,17 @@ MarkupSafe = ">=2.0"
 i18n = ["Babel (>=2.7)"]
 
 [[package]]
+name = "latex2mathml"
+version = "3.78.1"
+description = "Pure Python library for LaTeX to MathML conversion"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "latex2mathml-3.78.1-py3-none-any.whl", hash = "sha256:f089b6d75e85b937f99693c93e8c16c0804008672c3dd2a3d25affd36f238100"},
+    {file = "latex2mathml-3.78.1.tar.gz", hash = "sha256:f941db80bf41db33f31df87b304e8b588f8166b813b0257c11c98f7a9d0aac71"},
+]
+
+[[package]]
 name = "limits"
 version = "3.14.1"
 description = "Rate limiting utilities"
@@ -1437,4 +1448,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12.8"
-content-hash = "5223b804d7044c1793db33d208a4cf4d82fbd605515ddf86572cc06139e232f7"
+content-hash = "34a4bd8383918c8e2f50c92c5d6ac8b485ebc6138c04c05a3d5605ff3615a3a8"

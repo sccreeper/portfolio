@@ -3,3 +3,4 @@ from src.mdextensions.header_anchor_extension import HeaderAnchorExtension
 from src.mdextensions.image_processing_extension import ImageProcessorExtension
 from src.mdextensions.slideshow_extension import SlideshowExtension
 from src.mdextensions.inline_extensions import ColourExtension, IconExtension
+from src.mdextensions.maths_extension import MathsExtension

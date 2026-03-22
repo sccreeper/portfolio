@@ -40,29 +40,6 @@
 
       <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "bcf4e1a5647946aaba8ba8d84c3d297f"}'></script><!-- End Cloudflare Web Analytics -->
 
-      {# MathJAX #}
-
-      <script>
-
-        MathJax = {
-          tex: {
-            inlineMath: [['$', '$']],
-            displayMath: [["$$", "$$"]]
-          },
-          svg: {
-            fontCache: 'global'
-          }
-        };
-
-        // Re-render MathJax when HTMX request is made.
-        document.addEventListener("htmx:afterSettle", function(){
-          MathJax.typeset()
-        })
-
-      </script>
-
-      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/tex-mml-chtml.js"></script>
-
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
       {% block head %}{% endblock head %}
