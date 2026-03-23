@@ -26,8 +26,6 @@ def process_image(img_src: str) -> str:
 
     if not os.path.exists(img_src):    
         if not img_src in processed_images:
-            print(f"{img_src} doesn't exist")
-            print(processed_images)
 
             return img_src
 
@@ -38,11 +36,9 @@ def process_image(img_src: str) -> str:
         processed_images.append(img_src)
         return img_src
     elif img_src in processed_images:
-        print(f"Already processed '{img_src}'")
 
         return f"{filepath}.avif"
     else:
-        print(f"Processing '{img_src}'")
 
         subprocess.call(["magick", img_src, "-quality", QUALITY_VALUES[ext], f"{filepath}.avif"])
         os.remove(img_src)
@@ -66,7 +62,6 @@ class ImageProcessor(Treeprocessor):
 
                 src = "/content/" + process_image(img_attrib["src"])
                 src = urllib.parse.quote(src, safe="/")
-                print(src)
 
                 img_el = etree.Element("img")
                 source_el = etree.Element("source", attrib={"srcset": src})

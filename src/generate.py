@@ -63,13 +63,24 @@ def main():
 
                 ]
             )
+    
+    # Count number of markdown files for progress
+    num_markdown = 0
+
+    for f in files:
+        _, ext = os.path.splitext(f)
+
+        if ext == ".md":
+            num_markdown += 1
+    
+    num_processed = 0
 
     for f in files:
         slug, ext = os.path.splitext(f)
 
         if ext == ".md":
 
-            print(f"Generating {slug}")
+            print(f"\033[K{round((num_processed/num_markdown)*100)}% - Generating {slug}...", end="\r", flush=True)
 
             post = open(f"{f}", "r")
             text = post.read()
@@ -90,6 +101,8 @@ def main():
                 pickle.dump(p, pklf)
             
             post.close()
+
+            num_processed += 1
 
         else:
             continue
