@@ -4,11 +4,13 @@ from src.mdextensions import *
 from src._dataclasses import PostData, PostMeta, DateContainer
 from datetime import datetime
 import pickle
+from pygments.formatters import HtmlFormatter
 
 from markdown.extensions.meta import MetaExtension
 from markdown.extensions.fenced_code import FencedCodeExtension
 from markdown.extensions.tables import TableExtension
 from markdown.extensions.footnotes import FootnoteExtension
+from markdown.extensions.codehilite import CodeHiliteExtension
 
 def post_from_metadata(metadata: dict, url: str, length: int) -> PostMeta:
 
@@ -29,6 +31,12 @@ def post_from_metadata(metadata: dict, url: str, length: int) -> PostMeta:
 
 def main():
 
+    # Do code CSS
+    styles = HtmlFormatter(style="monokai").get_style_defs(".highlight")
+
+    with open("src/static/code.css", 'w') as f:
+        f.write(styles)
+
     # Load post metadata.
 
     print("Generating posts...")
@@ -42,6 +50,7 @@ def main():
             extensions=[
                 MetaExtension(), 
                 FencedCodeExtension(),
+                CodeHiliteExtension(guess_lang=False, css_class="highlight"),
                 TableExtension(),
                 FootnoteExtension(BACKLINK_TEXT="^", SUPERSCRIPT_TEXT="[{}]"),
                 SlideshowExtension(), 
@@ -50,7 +59,8 @@ def main():
                 ImageProcessorExtension(),
                 ColourExtension(),
                 IconExtension(),
-                MathsExtension()
+                MathsExtension(),
+
                 ]
             )
 
