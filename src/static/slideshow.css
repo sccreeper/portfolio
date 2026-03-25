@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 * {
-    font-family: 'Fira Mono', monospace;
-    @apply text-black;
+    font-family: 'Fira Sans', sans-serif;
+    @apply text-gray-950;
     @apply dark:text-white;
 }
 
