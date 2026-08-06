@@ -6,6 +6,15 @@ The source for my portfolio website and blog at [www.oscarcp.net](https://www.os
 
 Everything under the `src` folder is under an MIT license (see `LICENSE_ENGINE`) as well as associated software files in the root directory. Files in the `content` directory fall under CC-BY-4.0 (`LICENSE_CONTENT`), apart from those where fair use/dealing may be a concern - files where this is a concern are marked with a  `.fd.` in their extension suffix accordingly.
 
+# Requirements
+
+The project is intended to be run in Docker, as such, only the development requirements are listed below:
+
+- Poetry
+- Python >= 3.12.8
+- Docker
+- Some systems may require the `libjepg` headers in order for pillow to build correctly.
+
 # Project layout
 
 - `content` - Contains all blogposts and their associated assets (images, documents etc.).
