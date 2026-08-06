@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 export SECRET="123456"
 export DEBUG="true"

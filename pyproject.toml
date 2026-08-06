@@ -5,6 +5,7 @@ description = "Blog/portfolio"
 authors = ["Oscar Peace <oscar@oscarcp.net>"]
 license = "MIT"
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12.8"

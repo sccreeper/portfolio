@@ -6,6 +6,7 @@ from src.db.models import BaseModel, CommentModel, PostModel
 from typing import Any
 from dataclasses import dataclass
 from datetime import datetime
+import os
 
 _POSTS_DB_PATH = "/var/lib/portfolio/posts.db"
 _COMMENTS_DB_PATH = "/var/lib/portfolio/comments.db"
@@ -27,6 +28,12 @@ def migrate():
     engine = create_engine(f"sqlite:///{DATABASE_PATH}", echo=True)
     # create_database(engine.url)
     BaseModel.metadata.create_all(engine)
+
+    # If no previous database exists, just do nothing
+    if not os.path.exists(_POSTS_DB_PATH) and not os.path.exists(_COMMENTS_DB_PATH):
+        print(f"No pre-existing database found for purposes of migration")
+        engine.dispose()
+        return
 
     # Migrate existing data
 
